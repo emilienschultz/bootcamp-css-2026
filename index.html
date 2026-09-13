@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="slides_files/libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.36">
+
+  <meta name="author" content="Émilien Schultz — emilien.schultz@ensae.fr">
+  <meta name="dcterms.date" content="2026-09-17">
+  <title>Data Management &amp; Compute</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/theme/quarto-0427d8d92a431aa6a6430e53ec02a470.css">
+  <link href="slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Data Management &amp; Compute</h1>
+  <p class="subtitle">CSS Bootcamp — Day 2</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Émilien Schultz — emilien.schultz@ensae.fr 
+</div>
+</div>
+</div>
+
+  <p class="date">2026-09-17</p>
+</section>
+<section>
+<section id="forewords" class="title-slide slide level1 center">
+<h1>Forewords</h1>
+
+</section>
+<section id="who-am-i" class="slide level2">
+<h2>Who am I</h2>
+<ul>
+<li><strong>Émilien Schultz</strong>
+<ul>
+<li>Research engineer / data scientist at CREST</li>
+<li>Research facilitator: I help on data &amp; code</li>
+<li><em>emilien.schultz@ensae.fr</em> — office 4044</li>
+</ul></li>
+</ul>
+<div title="Today's rule">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Today’s rule</strong></p>
+</div>
+<div class="callout-content">
+<p>Everything we do today has to survive <strong>the loss of your computer</strong>. Scientific computation needs robustness, not brittleness.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="tree-questions" class="slide level2">
+<h2>Tree questions</h2>
+<ul>
+<li>Who are you?</li>
+<li>What is the <strong>largest dataset</strong> you ever opened?</li>
+<li>Did you ever meet limit to run scripts/computation?</li>
+</ul>
+</section>
+<section id="programme" class="slide level2">
+<h2>Programme</h2>
+<ol type="1">
+<li>The new era of scientific computing</li>
+<li>Reproducibility, open science &amp; DevOps</li>
+<li>Organising a data project</li>
+<li>Storage vs compute: sizes, HPC</li>
+<li>Onyxia (live)</li>
+<li>Secrets &amp; security hygiene</li>
+<li>SSH (live)</li>
+<li>Hands on (mainly afternoon)</li>
+</ol>
+</section>
+<section id="the-philosophy-of-the-day" class="slide level2">
+<h2>The philosophy of the day</h2>
+<p>The <strong>unholy trinity</strong></p>
+<ul>
+<li>Computational service (<strong>compute</strong>)</li>
+<li>Scripts / software / treatments (<strong>code</strong>)</li>
+<li><strong>Data</strong></li>
+</ul>
+<p><strong>Each aspect has specific tools/best practices.</strong></p>
+</section>
+<section id="and-now-also-ai" class="slide level2">
+<h2>And now, also AI</h2>
+<p>Is it a fourth dimension ?</p>
+<ul>
+<li>Models</li>
+<li>Workflow</li>
+<li>Tooling</li>
+<li>…</li>
+</ul>
+<div title="What does it change ?">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>What does it change ?</strong></p>
+</div>
+<div class="callout-content">
+<p>It changes a lot of practices, but not the general philosophy or architecture we are going to see today.</p>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="the-new-era-of-scientific-computing" class="title-slide slide level1 center">
+<h1>The new era of scientific computing</h1>
+
+</section>
+<section id="new-skills-in-computational-social-science" class="slide level2">
+<h2>New skills in computational social science?</h2>
+<ul>
+<li><strong>New volumes</strong> of data in fields that were not computational: text, web, admin data, digital traces</li>
+<li><strong>Higher expectations</strong> of reproducibility and long-term storage (journals, funders, DMPs)</li>
+<li><strong>New tools</strong> (LLMs, embeddings, large models) need GPUs and remote compute</li>
+<li>More and more <strong>collaboration</strong>: several people, several machines, several months</li>
+</ul>
+</section>
+<section id="what-changes-when-you-leave-your-laptop" class="slide level2">
+<h2>What changes when you leave your laptop</h2>
+<ul>
+<li>Nothing is persistent by default</li>
+<li>No mouse, no GUI: <strong>command line</strong></li>
+<li>Resources are requested, shared, and (sometimes) paid</li>
+<li>Your credentials become the problem</li>
+<li>Everything has to be <strong>written down</strong>: scripts, not clicks</li>
+</ul>
+<p><em>This is what makes it reproducible.</em></p>
+</section>
+<section id="where-could-you-run-your-code" class="slide level2">
+<h2>Where could you run your code?</h2>
+<ul>
+<li><strong>Local computer</strong>
+<ul>
+<li>limit of resources / not collaborative / messy</li>
+</ul></li>
+<li><strong>Cloud services</strong> (Google Colab, Kaggle)
+<ul>
+<li>proprietary, limited, black box</li>
+</ul></li>
+<li><strong>Institutional services</strong> (Onyxia datalab, Jean Zay, CREST server)
+<ul>
+<li>conditions of access, availability</li>
+<li>but shared storage, big machines, GPUs</li>
+</ul></li>
+</ul>
+<p><strong>How to size resources?</strong> (later)</p>
+</section></section>
+<section>
+<section id="reproducibility-open-science-devops" class="title-slide slide level1 center">
+<h1>Reproducibility, open science &amp; DevOps</h1>
+
+</section>
+<section id="what-is-reproducibility" class="slide level2">
+<h2>What is reproducibility</h2>
+<p>A result or project is never a one shot.</p>
+<blockquote>
+<p>A result is reproducible when the same analysis steps performed on the same dataset consistently produce the same answer.</p>
+</blockquote>
+<p><strong>…on another machine, by another person, later.</strong></p>
+</section>
+<section id="science-loves-reproducibility" class="slide level2">
+<h2>Science loves reproducibility</h2>
+
+<img data-src="./img/howscientist.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="different-flavours-of-reproducibility" class="slide level2">
+<h2>Different flavours of reproducibility</h2>
+
+<img data-src="./img/differentrepro.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="what-it-entails-to-be-reproducible" class="slide level2">
+<h2>What it entails to be reproducible</h2>
+<p>Be able to walk the path again: connecting data, software and questions</p>
+
+<img data-src="./img/repro.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="openness" class="slide level2">
+<h2>Openness</h2>
+<p>Both for data and code, create the possibility of reproducibility</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://www.smbc-comics.com/comic/science-fictions"><img data-src="./img/datafriend.jpeg" class="quarto-figure quarto-figure-center"></a></p>
+</figure>
+</div>
+<p><em>Not always possible for data - especially in social sciences with sensitive informations</em></p>
+</section>
+<section id="what-is-open-science" class="slide level2">
+<h2>What is open science</h2>
+<ul>
+<li>Clear methodologies</li>
+<li>Data accessibility: <strong>FAIR</strong> (Findable, Accessible, Interoperable, Reusable)</li>
+<li>Reusable software (open code, open formats)</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./img/faire.svg" class="quarto-figure quarto-figure-center" height="250"></p>
+</figure>
+</div>
+</section>
+<section id="how-to-conciliate-privacy-with-reproducibility" class="slide level2">
+<h2>How to conciliate privacy with reproducibility</h2>
+<ul>
+<li><a href="https://rea.ec.europa.eu/open-science_en">As open as possible, as closed as necessary</a></li>
+<li>Anonymise / pseudonymise</li>
+<li>Aggregate</li>
+<li>Synthetic data</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./img/privacy.png" class="quarto-figure quarto-figure-center" height="300"></p>
+</figure>
+</div>
+</section>
+<section id="how-to-achieve-it-the-minimal-kit" class="slide level2">
+<h2>How to achieve it: the minimal kit</h2>
+<ol type="1">
+<li>A <strong>Git repository</strong> with a <code>README.md</code>: what, how to run, where the data is</li>
+<li>A <strong>pinned environment</strong>: <code>requirements.txt</code> (or <code>pyproject.toml</code>), Python version</li>
+<li><strong>Scripts</strong>, not only notebooks</li>
+<li><strong>Data separated from code</strong>: raw data immutable, every transformation scripted</li>
+<li>Random seeds, logged parameters, dated outputs</li>
+</ol>
+<p><em>This is the deliverable of the afternoon.</em></p>
+</section>
+<section id="scripts-notebooks-and-packages" class="slide level2">
+<h2>Scripts, notebooks and packages</h2>
+<ul>
+<li>Notebooks allow literate programming
+<ul>
+<li>very useful for exploration / prototyping</li>
+</ul></li>
+<li>Scripts are better for stability, automation, remote execution</li>
+<li>A pathway: notebook → script → package</li>
+</ul>
+<p><strong>Rule of thumb</strong>: if it runs more than once, it is a script.</p>
+</section>
+<section id="pin-your-environment-for-information" class="slide level2">
+<h2>Pin your environment (for information)</h2>
+<p>A script depends on a Python version and packages. Freeze them in a <strong>virtual environment</strong>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv                 <span class="co"># create (or: uv venv)</span></span>
+<span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate            <span class="co"># activate</span></span>
+<span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install pandas polars duckdb     <span class="co"># install what you need</span></span>
+<span id="cb1-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> freeze <span class="op">&gt;</span> requirements.txt        <span class="co"># record exact versions</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>On a new machine:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><code>.venv/</code> goes in <code>.gitignore</code>; <code>requirements.txt</code> goes in Git. Alternatives: <code>conda</code>, <code>uv</code>, <code>pyproject.toml</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="the-devops-connection" class="slide level2">
+<h2>The DevOps connection</h2>
+<p><strong>DevOps</strong> = practices that let software teams ship code to servers reliably</p>
+<ul>
+<li>version control, automated tests, CI/CD</li>
+<li>containers, infrastructure as code</li>
+<li>logs, monitoring</li>
+</ul>
+<p><strong>MLOps</strong> = the same for data and models: data versioning, pipelines, experiment tracking ; <strong>LLMOps</strong>, you guess…</p>
+</section>
+<section id="what-research-borrows-from-it" class="slide level2">
+<h2>What research borrows from it</h2>
+<p>A new terminology that is invading computational practice</p>
+<ul>
+<li><strong>Containers</strong> (Docker image): a frozen environment</li>
+<li><strong>Pipelines</strong>: a Makefile / <code>run.sh</code> / snakemake with a clear order of steps</li>
+<li><strong>Logs</strong>: know what happened when you were not looking</li>
+<li><strong>CI</strong>: GitHub Actions running tests on each change</li>
+</ul>
+<blockquote>
+<p>Research workflows should be designed with recomputation in mind</p>
+</blockquote>
+</section>
+<section id="new-vocabulary-new-collaborations" class="slide level2">
+<h2>New vocabulary, new collaborations</h2>
+<p>You will work with research engineers, data engineers, sysadmins of the datalab / HPC.</p>
+<p>Knowing their words (<em>pod, bucket, job, image, quota</em>) is what makes a ticket answered in one exchange instead of five.</p>
+</section>
+<section id="the-reproducibility-ladder" class="slide level2">
+<h2>The reproducibility ladder</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>What you have</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>a notebook on a laptop</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>script + README + Git</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>+ pinned environment + data on shared storage</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>+ container / CI</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>+ workflow manager on HPC</td>
+</tr>
+</tbody>
+</table>
+</section></section>
+<section>
+<section id="organising-a-data-project" class="title-slide slide level1 center">
+<h1>Organising a data project</h1>
+
+</section>
+<section id="rule-0-know-your-data" class="slide level2">
+<h2>Rule 0: know your data</h2>
+<ul>
+<li>Have a look at your data
+<ul>
+<li>duplicates, empty data, encoding</li>
+</ul></li>
+<li>Before starting complex treatments
+<ul>
+<li>do simple treatments</li>
+<li>ask yourself if the question and the data match</li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./img/garbagein.jpeg" class="quarto-figure quarto-figure-center" height="250"></p>
+</figure>
+</div>
+</section>
+<section id="rule-1-structuring-a-project" class="slide level2">
+<h2>Rule 1: structuring a project</h2>
+<ul>
+<li><strong>Separate code from data</strong>
+<ul>
+<li>different logic, different tools, different sizes, different rights</li>
+</ul></li>
+<li><strong>Document / comment</strong> your productions
+<ul>
+<li>be explicit (variables, README)</li>
+<li><em>yes, it is boring, but useful</em></li>
+</ul></li>
+<li><strong>Modularise</strong>: create distinct elements
+<ul>
+<li>one file per step</li>
+<li>functions rather than repeated code</li>
+</ul></li>
+</ul>
+</section>
+<section id="there-will-always-be-another-monday" class="slide level2">
+<h2>There will always be another Monday</h2>
+
+<img data-src="./img/comment.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="rule-2-a-common-file-system" class="slide level2">
+<h2>Rule 2: a common file system</h2>
+<pre><code>project-name/
+│
+├── README.md              # what, how to run, where is the data
+├── requirements.txt       # pinned environment
+├── .gitignore             # data/, .env, outputs
+├── data/                  # NOT in git
+│   ├── README.md          # -&gt; where the data really is
+│   ├── raw/               # original, immutable
+│   ├── intermediate/
+│   └── processed/         # analysis-ready
+├── src/                   # one script per step
+├── docs/
+└── reports/
+    ├── figures/
+    └── tables/</code></pre>
+</section>
+<section id="rule-2-bis-paths" class="slide level2">
+<h2>Rule 2 bis: paths</h2>
+<div title="Bad">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Bad</strong></p>
+</div>
+<div class="callout-content">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"/Users/emilien/Downloads/final2.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div title="Good">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Good</strong></p>
+</div>
+<div class="callout-content">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a>DATA <span class="op">=</span> Path(os.environ.get(<span class="st">"DATA_DIR"</span>, <span class="st">"data"</span>))</span>
+<span id="cb5-4"><a href="" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(DATA <span class="op">/</span> <span class="st">"raw"</span> <span class="op">/</span> <span class="st">"wiki.parquet"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<p>Paths are configuration, not code.</p>
+</section>
+<section id="rule-3-organise-the-code-for-collaboration" class="slide level2">
+<h2>Rule 3: organise the code for collaboration</h2>
+<ul>
+<li>One script = one step (if you want to go further, a <code>run.sh</code> / <code>Makefile</code> chains them-</li>
+<li>Parameters as CLI arguments or a config file, never hard-coded (so you can share your code)</li>
+<li>Log what you do (<code>print</code> is a start, <code>logging</code> is better)</li>
+<li>Git: one branch per person/feature, small commits, PR + review</li>
+<li>Issues as the shared to-do list</li>
+<li>Conventions &gt; tools: write them in the README</li>
+</ul>
+</section>
+<section id="the-data-lifecycle-a-specific-philosophy" class="slide level2">
+<h2>The data lifecycle : a specific philosophy</h2>
+
+<img data-src="./img/diagram-data-workflow-steps.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="where-to-store-the-data" class="slide level2">
+<h2>Where to store the data</h2>
+<p><strong>During the project</strong></p>
+<ul>
+<li>Laptop: temporary</li>
+<li>Institutional solutions</li>
+<li>Cloud solutions: with care (privacy)</li>
+</ul>
+<p><strong>After the project</strong></p>
+<ul>
+<li>Zenodo, Figshare, Hugging Face datasets, data.gouv.fr</li>
+</ul>
+</section>
+<section id="ideally-a-data-management-plan" class="slide level2">
+<h2>Ideally, a Data Management Plan</h2>
+<p><a href="https://library.ucsd.edu/research-and-collections/research-data/plan-and-manage/data-management-best-practices.html">Data management plan</a>: a document that lists the data and how you handle it</p>
+<ul>
+<li>What types of data? What formats?</li>
+<li>What <strong>volume</strong>?</li>
+<li>Where stored <strong>during</strong>? Where <strong>after</strong>?</li>
+<li>Who can access it? Privacy?</li>
+<li>Naming and versioning strategy?</li>
+</ul>
+</section>
+<section id="rule-4-accept-to-spend-time-on-data-preparation" class="slide level2">
+<h2>Rule 4: accept to spend time on data preparation</h2>
+
+<img data-src="./img/iceberg.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="avoid-correcting-your-data-manually" class="slide level2">
+<h2>Avoid correcting your data manually</h2>
+<p>Build a workflow — write scripts</p>
+
+<img data-src="./img/datafix.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="lets-talk-about-data-format" class="slide level2">
+<h2>Let’s talk about data format</h2>
+<p>Format is both information &amp; affordance</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://xkcd.com/1683/"><img data-src="./img/dataloss.png" class="quarto-figure quarto-figure-center"></a></p>
+</figure>
+</div>
+</section>
+<section id="what-are-the-best-data-formats" class="slide level2">
+<h2>What are the best data formats</h2>
+
+<img data-src="./img/normformat.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="formats-a-practical-map" class="slide level2">
+<h2>Formats: a practical map</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Format</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>CSV</strong></td>
+<td>universal, human-readable</td>
+<td>no types, encoding &amp; separators, slow, big</td>
+</tr>
+<tr class="even">
+<td><strong>JSON / JSONL</strong></td>
+<td>nested, streams line by line</td>
+<td>verbose</td>
+</tr>
+<tr class="odd">
+<td><strong>Parquet</strong></td>
+<td>typed, compressed, columnar, splittable</td>
+<td>binary, needs a library</td>
+</tr>
+<tr class="even">
+<td><strong>SQLite / DuckDB</strong></td>
+<td>relational, joins, SQL</td>
+<td>one file, one writer</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Suggestion</strong>: open format + think about how you will <em>access</em> it.</p>
+</section>
+<section id="data-architecture-aim-for-tidy-data" class="slide level2">
+<h2>Data architecture: aim for tidy data</h2>
+<ul>
+<li>Separate raw data from transformed data</li>
+<li>Move from unstructured to structured</li>
+<li>Tidy data</li>
+</ul>
+
+<img data-src="./img/tidydata.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
+<section>
+<section id="storage-vs-compute" class="title-slide slide level1 center">
+<h1>Storage vs compute</h1>
+
+</section>
+<section id="what-kind-of-computation-do-you-need" class="slide level2">
+<h2>What kind of computation do you need?</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resource</th>
+<th>What it limits</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>CPU</strong> (cores)</td>
+<td>speed, parallelism</td>
+</tr>
+<tr class="even">
+<td><strong>RAM</strong></td>
+<td>the size of what you can hold: <strong>the true bottleneck for data</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>Disk</strong></td>
+<td>local = ephemeral &amp; fast; object storage = persistent &amp; shared</td>
+</tr>
+<tr class="even">
+<td><strong>GPU</strong></td>
+<td>deep learning, embeddings, LLMs</td>
+</tr>
+<tr class="odd">
+<td><strong>Network</strong></td>
+<td>moving 17 GB is not free</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-to-think-about-sizes" class="slide level2">
+<h2>How to think about sizes</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Size</th>
+<th>Example</th>
+<th>Consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 MB</td>
+<td>a survey</td>
+<td>anything works</td>
+</tr>
+<tr class="even">
+<td>100 MB</td>
+<td>a year of admin data</td>
+<td>Excel breaks, pandas is fine</td>
+</tr>
+<tr class="odd">
+<td>1 GB</td>
+<td>one Wikipedia shard, compressed</td>
+<td>think about RAM</td>
+</tr>
+<tr class="even">
+<td>10–100 GB</td>
+<td>full Wikipedia, a month of Reddit</td>
+<td>stream or sample, remote machine</td>
+</tr>
+<tr class="odd">
+<td>1 TB+</td>
+<td></td>
+<td>you need a data engineer</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="rules-of-thumb" class="slide level2">
+<h2>Rules of thumb</h2>
+<ul>
+<li>RAM needed ≈ <strong>3–10×</strong> the compressed parquet size (text)</li>
+<li>If it does not fit: <strong>stream</strong> (row groups, chunks, lazy engines) or <strong>sample</strong></li>
+<li>Favour small data if you can</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./img/smalldata.png" class="quarto-figure quarto-figure-center" height="300"></p>
+</figure>
+</div>
+</section>
+<section id="otherwise" class="slide level2">
+<h2>Otherwise</h2>
+<p><strong>Solution 1: reduce your data</strong></p>
+<ul>
+<li>work on a subset / sample</li>
+<li>read only the columns you need</li>
+<li>batch</li>
+</ul>
+<p><strong>Solution 2: parallelise</strong></p>
+<ul>
+<li>more cores on one machine (polars, DuckDB, …)</li>
+<li>more machines (Dask, Spark, HPC jobs)</li>
+<li>dedicated tools: <a href="https://github.com/medialab/xan">xan</a> for CSV</li>
+</ul>
+</section>
+<section id="where-to-run-a-decision-tree" class="slide level2">
+<h2>Where to run: a decision tree</h2>
+<ul>
+<li>Fits in your laptop RAM, runs in minutes → <strong>laptop</strong></li>
+<li>Needs more RAM / a GPU / hours → <strong>Onyxia datalab</strong></li>
+<li>Needs days, many GPUs, thousands of jobs → <strong>HPC</strong> (Jean Zay, GENCI)</li>
+</ul>
+<p><strong>Start small, then scale</strong></p>
+<blockquote>
+<p>This process of scaling out the analysis can often be daunting, particularly for researchers new to computational methods</p>
+</blockquote>
+</section>
+<section id="what-is-hpc" class="slide level2">
+<h2>What is HPC</h2>
+<ul>
+<li>A <strong>cluster</strong> of nodes with a shared file system</li>
+<li>A <strong>job scheduler</strong> (SLURM): you <em>submit</em> a script, you do not <em>run</em> it</li>
+<li>Queues, allocations, quotas, no GUI: CLI only</li>
+<li>Onyxia / Kubernetes is the middle ground: interactive, containerised, self-service</li>
+</ul>
+</section>
+<section id="know-your-cli-jean-zay" class="slide level2">
+<h2>Know your CLI: Jean Zay</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="http://www.idris.fr/media/su/idrischeatsheet.pdf"><img data-src="./img/jeanzay.png" class="quarto-figure quarto-figure-center"></a></p>
+</figure>
+</div>
+</section>
+<section id="the-scale-ladder" class="slide level2">
+<h2>The scale ladder</h2>
+<ol type="1">
+<li>One file, on a sample → does the code work?</li>
+<li>One file, full size → does it fit in memory? how long?</li>
+<li>All files, one machine → parallelise</li>
+<li>All files, many machines → HPC</li>
+</ol>
+<p><em>Measure at each step: time, peak memory.</em></p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>A 32 GB pod left running for a week is not free. <strong>Kill your services.</strong></p>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="onyxia" class="title-slide slide level1 center">
+<h1>Onyxia</h1>
+
+</section>
+<section id="what-is-onyxia" class="slide level2">
+<h2>What is Onyxia</h2>
+<ul>
+<li>An open-source <strong>datalab</strong> platform developed by INSEE</li>
+<li>Instances:
+<ul>
+<li>GENES: <a href="https://onyxia.lab.groupe-genes.fr">https://onyxia.lab.groupe-genes.fr</a></li>
+<li>INSEE SSPCloud: <a href="https://datalab.sspcloud.fr">https://datalab.sspcloud.fr</a></li>
+</ul></li>
+</ul>
+<p><a href="https://docs.onyxia.sh/user-doc/user-guide">User documentation</a></p>
+</section>
+<section id="a-common-entry-for-different-services" class="slide level2">
+<h2>A common entry for different services</h2>
+
+<img data-src="img/onyxia.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="what-is-a-service" class="slide level2">
+<h2>What is a service</h2>
+<ul>
+<li>A <strong>container</strong> (Docker image: OS + Python + Jupyter/VS Code/RStudio…)</li>
+<li>running in a <strong>pod</strong> on a cluster</li>
+<li>with the <strong>resources you asked for</strong> (CPU, RAM, GPU, disk)</li>
+<li><strong>ephemeral</strong>: when it stops, its local disk is gone</li>
+</ul>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>The pod is compute, <strong>not storage</strong>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="how-to-launch-one-live" class="slide level2">
+<h2>How to launch one (live)</h2>
+<ol type="1">
+<li>Catalogue → <code>vscode-python</code> or <code>jupyter-python</code></li>
+<li>Configure: resources, persistence, init script, Git, S3</li>
+<li>Launch → wait → open</li>
+<li><strong>My services</strong>: see, delete, read the logs</li>
+</ol>
+</section>
+<section id="parameters-that-matter" class="slide level2">
+<h2>Parameters that matter</h2>
+<ul>
+<li><strong>Resources</strong>: CPU request / limit, <strong>RAM request / limit</strong>, GPU</li>
+<li><strong>Persistence</strong>: a volume (survives a restart of the service, not its deletion)</li>
+<li><strong>Init script</strong>: install packages at start</li>
+<li><strong>Git</strong>: a repository cloned at start, your name/email</li>
+<li><strong>S3</strong>: credentials injected as environment variables</li>
+</ul>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>The <strong>Kubernetes</strong> tab shows the pod events. This is where <code>OOMKilled</code> appears.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="how-to-access-storage" class="slide level2">
+<h2>How to access storage</h2>
+<ul>
+<li>The <strong>file browser</strong> (“My files”): buckets, upload/download</li>
+<li>In the terminal: the <code>mc</code> client</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mc</span> ls s3/</span>
+<span id="cb6-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mc</span> cp data/wiki.parquet s3/my-bucket/wiki/</span>
+<span id="cb6-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mc</span> cp <span class="at">-r</span> s3/my-bucket/wiki/ data/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>From Python: S3 is a URL + credentials in the environment</li>
+</ul>
+</section>
+<section id="s3-from-python" class="slide level2">
+<h2>S3 from Python</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="" aria-hidden="true" tabindex="-1"></a>storage_options <span class="op">=</span> {</span>
+<span id="cb7-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="st">"client_kwargs"</span>: {<span class="st">"endpoint_url"</span>: os.environ[<span class="st">"AWS_S3_ENDPOINT"</span>]},</span>
+<span id="cb7-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key"</span>: os.environ[<span class="st">"AWS_ACCESS_KEY_ID"</span>],</span>
+<span id="cb7-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="st">"secret"</span>: os.environ[<span class="st">"AWS_SECRET_ACCESS_KEY"</span>],</span>
+<span id="cb7-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="st">"token"</span>: os.environ[<span class="st">"AWS_SESSION_TOKEN"</span>],</span>
+<span id="cb7-9"><a href="" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-10"><a href="" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"s3://my-bucket/wiki/simple.parquet"</span>,</span>
+<span id="cb7-11"><a href="" aria-hidden="true" tabindex="-1"></a>                     storage_options<span class="op">=</span>storage_options)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>Tokens <strong>expire</strong> (≈ 24h). Renew from <em>My account → Connect to storage</em>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="what-survives-what" class="slide level2">
+<h2>What survives what</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Where</th>
+<th>Service restarts</th>
+<th>Service deleted</th>
+<th>Datalab down</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>file on the pod</td>
+<td>✗</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr class="even">
+<td>persistent volume</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr class="odd">
+<td>S3 bucket</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓ (backup)</td>
+</tr>
+<tr class="even">
+<td>code on GitHub</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<p><strong>This is the lesson of the afternoon, stated up front.</strong></p>
+</section>
+<section id="hands-on-5-min" class="slide level2">
+<h2>Hands on (5 min)</h2>
+<ul>
+<li>Connect to <a href="https://onyxia.lab.groupe-genes.fr">https://onyxia.lab.groupe-genes.fr</a></li>
+<li>Launch a <code>vscode-python</code> service with <strong>2 CPU / 4 GB RAM</strong></li>
+<li>Open a terminal and run</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">nproc</span></span>
+<span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">free</span> <span class="at">-h</span></span>
+<span id="cb8-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> .</span>
+<span id="cb8-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span> <span class="kw">|</span> <span class="fu">grep</span> AWS</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section></section>
+<section>
+<section id="secrets-security-hygiene" class="title-slide slide level1 center">
+<h1>Secrets &amp; security hygiene</h1>
+
+</section>
+<section id="never-commit" class="slide level2">
+<h2>Never commit</h2>
+<ul>
+<li>S3 keys, Hugging Face tokens, GitHub tokens</li>
+<li>SSH private keys</li>
+<li><code>.env</code> files, config with passwords</li>
+<li>Personal data</li>
+</ul>
+<p><strong>Use</strong> <code>.gitignore</code> + environment variables + a <code>.env.example</code> without values.</p>
+</section>
+<section id="tokens-passwords-keys" class="slide level2">
+<h2>Tokens, passwords, keys</h2>
+<ul>
+<li><strong>Password</strong>: you, everywhere, forever → the worst</li>
+<li><strong>Token</strong>: a service, a scope, an expiry → prefer read-only, short</li>
+<li><strong>Key pair</strong>: a public half you share, a private half you never share</li>
+</ul>
+<p>If you leak something: <strong>revoke first</strong>, then clean the history. Prevention is much cheaper.</p>
+</section></section>
+<section>
+<section id="ssh" class="title-slide slide level1 center">
+<h1>SSH</h1>
+
+</section>
+<section id="what-is-ssh" class="slide level2">
+<h2>What is SSH</h2>
+<ul>
+<li><strong>S</strong>ecure <strong>SH</strong>ell: an encrypted remote terminal</li>
+<li>The universal door to servers and HPC</li>
+<li>(Also one way Git can talk to GitHub; today we use HTTPS + token)</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> eschultz@cca.in2p3.fr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="command-line-a-reminder" class="slide level2">
+<h2>Command line: a reminder</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./img/shell_command_syntax.svg" class="quarto-figure quarto-figure-center" height="150"></p>
+</figure>
+</div>
+<ul>
+<li><code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir -p</code>, <code>cp</code>, <code>mv</code>, <code>rm -r</code>, <code>cat</code>, <code>head</code></li>
+<li><code>man command</code> / <code>command --help</code></li>
+<li><code>|</code> to chain, <code>&gt;</code> to write</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./img/tar.png" class="quarto-figure quarto-figure-center" height="220"></p>
+</figure>
+</div>
+</section>
+<section id="from-commands-to-a-script" class="slide level2">
+<h2>From commands to a script</h2>
+<p>A file with a <code>.sh</code> extension, one command per line: this is your pipeline.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># run.sh — the whole treatment in one command</span></span>
+<span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span>                               <span class="co"># stop at the first error</span></span>
+<span id="cb10-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="va">SHARDS</span><span class="op">=</span><span class="va">${1</span><span class="op">:-</span><span class="st">"0 1"</span><span class="va">}</span>                   <span class="co"># first argument, default "0 1"</span></span>
+<span id="cb10-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/download.py <span class="at">--shards</span> <span class="va">$SHARDS</span></span>
+<span id="cb10-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/extract.py  <span class="at">--shards</span> <span class="va">$SHARDS</span> <span class="at">--keyword</span> data</span>
+<span id="cb10-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/build.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>First line (the <strong>shebang</strong>) says which interpreter to use</li>
+<li><code>chmod +x run.sh</code> then <code>./run.sh "0 1 2"</code> (or <code>bash run.sh</code>)</li>
+<li><code>$1</code>, <code>$2</code>: the arguments; <code>$VAR</code>: a variable</li>
+</ul>
+</section>
+<section id="create-a-key" class="slide level2">
+<h2>Create a key</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"name@ensae.fr"</span></span>
+<span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ~/.ssh/</span>
+<span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># id_ed25519      -&gt; private, never leaves your machine</span></span>
+<span id="cb11-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># id_ed25519.pub  -&gt; public, give it to servers and GitHub</span></span>
+<span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 600 ~/.ssh/id_ed25519</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Register the public key on the server (on <code>~/.ssh/authorized_keys</code>)</p>
+<p>Then <code>ssh user@SERVER</code> asks for nothing.</p>
+</section>
+<section id="use-it" class="slide level2">
+<h2>Use it</h2>
+<p>TO DO : CREATE A VM + PUT THE IP</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> user@SERVER                      <span class="co"># connect</span></span>
+<span id="cb12-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> file.py user@SERVER:~/project/    <span class="co"># copy a file</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>~/.ssh/config</code> to give names to servers:</p>
+<pre><code>Host crest
+    HostName SERVER
+    User user
+    IdentityFile ~/.ssh/id_ed25519</code></pre>
+<p>then <code>ssh crest</code>.</p>
+</section>
+<section id="once-on-the-server" class="slide level2">
+<h2>Once on the server</h2>
+<ul>
+<li><code>htop</code>, <code>nproc</code>, <code>free -h</code>, <code>df -h</code>, <code>du -sh *</code>: know the machine</li>
+<li>Keep a job alive after disconnecting: <code>nohup python script.py &amp;</code> or <strong><code>tmux</code></strong></li>
+<li>Reach a remote Jupyter: <code>ssh -L 8888:localhost:8888 crest</code></li>
+<li>Run your pipeline there: <code>git clone https://github.com/ORG/repo.git &amp;&amp; ./run.sh</code></li>
+</ul>
+</section></section>
+<section>
+<section id="code-versioning-recap" class="title-slide slide level1 center">
+<h1>Code versioning: recap</h1>
+
+</section>
+<section id="git-is-for-codetext-not-data" class="slide level2">
+<h2>Git is for code/text, not data</h2>
+<div title="Code &amp; Data">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Code &amp; Data</strong></p>
+</div>
+<div class="callout-content">
+<p>Git is not designed to version data</p>
+<p>Data goes to S3 / Zenodo / <a href="https://git-lfs.com/">Git LFS</a>. Git tracks <strong>how</strong> to get and transform it.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="gitignore-what-git-must-not-see" class="slide level2">
+<h2><code>.gitignore</code>: what Git must not see</h2>
+<p>A text file at the root of the repository, one pattern per line.</p>
+<pre class="gitignore"><code># data and outputs: on S3, not in Git
+data/
+reports/figures/
+*.parquet
+*.csv
+
+# secrets
+.env
+
+# environments and caches
+.venv/
+__pycache__/
+.ipynb_checkpoints/</code></pre>
+<ul>
+<li>Write it <strong>before</strong> the first commit: a file already tracked stays tracked</li>
+<li>Keep <code>data/README.md</code> tracked: <code>!data/README.md</code></li>
+<li><code>git status</code> shows what is still visible</li>
+</ul>
+</section>
+<section id="branches-merges-conflicts" class="slide level2">
+<h2>Branches, merges, conflicts</h2>
+<ul>
+<li>A <strong>branch</strong> is a parallel line of commits: <code>git switch -c name/feature</code></li>
+<li>A <strong>merge</strong> (via a PR) brings it back into <code>main</code></li>
+<li>A <strong>conflict</strong> happens when two branches changed the same lines</li>
+</ul>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+n_bins = 50
+=======
+n_bins = 100
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; alice/histogram</code></pre>
+<ol type="1">
+<li>Open the file, keep what you want, remove the markers</li>
+<li><code>git add FILE</code> then <code>git commit</code></li>
+<li>Small, frequent PRs → fewer conflicts. Pull <code>main</code> often.</li>
+</ol>
+</section>
+<section id="the-states-of-a-file" class="slide level2">
+<h2>The states of a file</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./img/git-committing.svg" class="quarto-figure quarto-figure-center" height="500"></p>
+</figure>
+</div>
+</section>
+<section id="the-complete-workflow" class="slide level2">
+<h2>The complete workflow</h2>
+
+<img data-src="./img/githubflow.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="connect-to-github-with-a-token" class="slide level2">
+<h2>Connect to GitHub with a token</h2>
+<p>Git talks to GitHub over <strong>HTTPS</strong>. Your password does not work: you need a <strong>personal access token</strong>.</p>
+<ol type="1">
+<li>GitHub → <em>Settings → Developer settings → Personal access tokens → Fine-grained</em></li>
+<li>Scope: your group repository, <strong>Contents: read &amp; write</strong>, expiry: one week</li>
+<li>Copy it once; it is a secret (<a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">doc</a>)</li>
+<li>Use it as the password when Git asks, and let Git remember it:</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name <span class="st">"Your Name"</span></span>
+<span id="cb16-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"you@ensae.fr"</span></span>
+<span id="cb16-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> credential.helper store   <span class="co"># remembers the token on this service</span></span>
+<span id="cb16-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/ORG/group-X.git  <span class="co"># username + token as password</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>The token is stored in clear in <code>~/.git-credentials</code> on the pod. It dies with the pod. Never paste it in a file of the repository.</p>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="hands-on" class="title-slide slide level1 center">
+<h1>Hands on</h1>
+
+</section>
+<section id="the-challenge" class="slide level2">
+<h2>The challenge</h2>
+<blockquote>
+<p>Deploy a <strong>reproducible</strong> treatment of a <strong>large dataset</strong> on Onyxia, with a strict separation between <strong>code</strong> (GitHub), <strong>storage</strong> (S3) and <strong>compute</strong> (an ephemeral service). And keep it small :)</p>
+</blockquote>
+<p>Dataset: <a href="https://huggingface.co/datasets/omarkamali/wikipedia-monthly">Wikipedia Monthly</a> on Hugging Face</p>
+</section>
+<section id="have-a-look-on-the-dataset" class="slide level2">
+<h2>Have a look on the dataset</h2>
+<ul>
+<li>Were is the data ?</li>
+<li>What is HuggingFace ?</li>
+<li>What is the format ?</li>
+</ul>
+</section>
+<section id="what-is-a-parquet-file" class="slide level2">
+<h2>What is a Parquet file</h2>
+<ul>
+<li><strong>Columnar</strong>: read only the columns you need</li>
+<li><strong>Typed</strong> schema embedded in the file</li>
+<li><strong>Compressed</strong> (snappy, zstd): 3–10× smaller than CSV</li>
+<li>Split in <strong>row groups</strong>: read a slice without loading everything</li>
+<li>The format of data lakes, Hugging Face, Spark, DuckDB, polars…</li>
+</ul>
+<div title="On disk ≠ in memory">
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>On disk ≠ in memory</strong></p>
+</div>
+<div class="callout-content">
+<p>A 2 GB parquet of text can need <strong>6–10 GB of RAM</strong> once loaded in pandas.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-dataset" class="slide level2">
+<h2>The dataset</h2>
+<div class="line-block">Subset | Files | Total | Notes |<br>
+<code>20250702.en</code> | 17 shards | 17.3 GB | shard 0 = <strong>2.3 GB</strong> |</div>
+<p>Fields: <code>id</code>, <code>url</code>, <code>title</code>, <code>text</code> (clean plain text). Licence CC-BY-SA.</p>
+<p><strong>Today: <code>20250702.en</code>.</strong> Shards go from <code>train_00016.parquet</code> (576 MB) up to <code>train_00000.parquet</code> (2.3 GB).</p>
+</section>
+<section id="the-steps" class="slide level2">
+<h2>The steps</h2>
+<ol type="1">
+<li><strong>Launch a service, update the common repository</strong></li>
+<li><strong>A notebook</strong>: download one shard, first analytics</li>
+<li><strong>A script</strong>: download the shards, keep the articles mentioning a keyword, upload the <strong>built dataset</strong> on S3</li>
+<li><strong>Scale</strong>: the same script on the big English shards, one file at a time, on a low-memory service</li>
+<li><strong>Other tools</strong> for the same job</li>
+</ol>
+<div title="Rule of the afternoon">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Rule of the afternoon</strong></p>
+</div>
+<div class="callout-content">
+<p>At some point I will ask you to delete your service and you will need to reset everything, so you need to keep track :)</p>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="step-1-a-service-and-a-common-repository" class="title-slide slide level1 center">
+<h1>Step 1 — A service and a common repository</h1>
+
+</section>
+<section id="setup" class="slide level2">
+<h2>Setup</h2>
+<div title="Checklist">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Checklist</strong></p>
+</div>
+<div class="callout-content">
+<ul class="task-list">
+<li><label><input type="checkbox">One GitHub repository per group with a basic organization and a <code>README.md</code></label></li>
+<li><label><input type="checkbox">A GitHub personal access token with write access to the group repository</label></li>
+<li><label><input type="checkbox">Each member launches a <code>vscode-python</code> service with <strong>2 CPU / 4 GB RAM</strong>, S3 enabled</label></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="take-your-service-in-hand" class="slide level2">
+<h2>Take your service in hand</h2>
+<ul>
+<li>Clone the repository</li>
+<li>Have a look at the repository structure and the README skeleton</li>
+<li>Each member: add your name to the README in a new branch, commit, push, open a PR, merge one of your teammates’ PR</li>
+</ul>
+<!--
+```bash
+git clone https://github.com/ORG/group-X.git
+cd group-X
+git switch -c yourname/readme
+# edit README.md
+git add README.md && git commit -m "add my name"
+git push -u origin yourname/readme
+```
+-->
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>Check: does <code>git status</code> show your <code>data/</code> folder? It should not.</p>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="step-2-a-notebook-on-one-shard" class="title-slide slide level1 center">
+<h1>Step 2 — A notebook on one shard</h1>
+
+</section>
+<section id="download-one-shard-in-python" class="slide level2">
+<h2>Download one shard, in Python</h2>
+<p>Read the <a href="https://huggingface.co/datasets/omarkamali/wikipedia-monthly">dataset card</a>: fields, licence, shards. Then, in a notebook:</p>
+<ul>
+<li>See the HF CLI</li>
+<li>Find a way to download <strong>the smallest shard</strong>: <code>20250702.en/train_00016.parquet</code> (576 MB) - Python or CLI</li>
+<li>Where did the file land? How big is it? (<code>ls -lh data/raw/...</code>)</li>
+</ul>
+<!--
+```python
+from huggingface_hub import hf_hub_download
+
+path = hf_hub_download(
+    repo_id="omarkamali/wikipedia-monthly",
+    repo_type="dataset",
+    filename="20250702.en/train_00016.parquet",
+    local_dir="data/raw",
+)
+print(path)
+```
+-->
+</section>
+<section id="first-analytics" class="slide level2">
+<h2>First analytics</h2>
+<p>In a notebook, with <code>pandas</code>:</p>
+<ul>
+<li>load the shard, look at the columns and a few rows</li>
+<li>plot the histogram of text lengths → save it in <code>reports/figures/</code></li>
+<li>print the title of the longest article</li>
+<li>extract the articles mentioning <code>"data"</code> → <code>data/processed/</code></li>
+</ul>
+<!--
+```python
+import pandas as pd
+df = pd.read_parquet(path)
+df["n"] = df["text"].str.len()
+df["n"].plot.hist(bins=50, logy=True)
+```
+-->
+</section>
+<section id="update-the-repository" class="slide level2">
+<h2>Update the repository</h2>
+<ul>
+<li>The notebook goes to <code>notebooks/</code>, the figure to <code>reports/figures/</code></li>
+<li>The data does <strong>not</strong> go to Git: check <code>git status</code></li>
+<li>Commit, push, PR, review by a teammate, merge</li>
+</ul>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Write in the README what the notebook does and how to get the shard.</p>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="step-3-a-script-download-downsize-upload" class="title-slide slide level1 center">
+<h1>Step 3 — A script: download, downsize, upload</h1>
+
+</section>
+<section id="from-the-notebook-to-a-script" class="slide level2">
+<h2>From the notebook to a script</h2>
+<p>The notebook proved the idea on one shard. Now a <strong>script</strong> runs the whole pipeline:</p>
+<p><code>src/build_dataset.py</code></p>
+<ol type="1">
+<li>takes a subset name, a list of shards and a keyword as arguments</li>
+<li><strong>downloads</strong> each shard from HF (local, <code>data/raw/</code>)</li>
+<li><strong>downsizes</strong>: keeps <code>id, title, url, length</code> (and <code>text</code>?) of the articles mentioning the keyword</li>
+<li><strong>builds</strong> one dataset from all the shards → <code>data/processed/wiki_&lt;keyword&gt;.parquet</code></li>
+<li><strong>option</strong> <code>--delete-raw</code>: deletes the raw shard once loaded (17 GB do not fit on the pod)</li>
+</ol>
+<p>Raw shards are disposable. The built dataset is what matters.</p>
+</section>
+<section id="downsize" class="slide level2">
+<h2>Downsize</h2>
+<ul>
+<li>How much smaller is the built dataset than the raw shards? (<code>ls -lh</code>)</li>
+<li>What do you keep: the full <code>text</code> or only its length? What do you lose?</li>
+<li>Is it still useful to someone who did not see the raw data? → document it in <code>data/README.md</code></li>
+</ul>
+<!--
+```python
+import argparse, os, pandas as pd
+from huggingface_hub import hf_hub_download
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--subset", default="20250702.en")
+parser.add_argument("--shards", nargs="+", required=True)
+parser.add_argument("--keyword", default="data")
+parser.add_argument("--delete-raw", action="store_true",
+                    help="delete the raw shard once loaded")
+args = parser.parse_args()
+
+parts = []
+for name in args.shards:
+    path = hf_hub_download("omarkamali/wikipedia-monthly", repo_type="dataset",
+                           filename=f"{args.subset}/{name}", local_dir="data/raw")
+    df = pd.read_parquet(path)
+    if args.delete_raw:
+        os.remove(path)
+    hit = df[df["text"].str.contains(args.keyword, case=False)].copy()
+    hit["length"] = hit["text"].str.len()
+    parts.append(hit[["id", "title", "url", "length"]])
+    print(name, len(df), "->", len(hit))
+
+out = pd.concat(parts)
+out.to_parquet(f"data/processed/wiki_{args.keyword}.parquet", index=False)
+```
+-->
+</section>
+<section id="upload-the-built-dataset-on-s3" class="slide level2">
+<h2>Upload the built dataset on S3</h2>
+<ul>
+<li>Modify the script to upload the built dataset on a bucket once it is completed.</li>
+<li>Read it back from S3 in a notebook</li>
+</ul>
+<!--
+```python
+import os, s3fs
+
+fs = s3fs.S3FileSystem(
+    client_kwargs={"endpoint_url": "https://" + os.environ["AWS_S3_ENDPOINT"]},
+    key=os.environ["AWS_ACCESS_KEY_ID"],
+    secret=os.environ["AWS_SECRET_ACCESS_KEY"],
+    token=os.environ["AWS_SESSION_TOKEN"],
+)
+BUCKET = "group-x"
+fs.put(f"data/processed/wiki_{args.keyword}.parquet",
+       f"{BUCKET}/wiki/processed/wiki_{args.keyword}_{args.subset}.parquet")
+print(fs.ls(f"{BUCKET}/wiki/processed"))
+```
+-->
+</section>
+<section id="run-it-and-add-it-to-the-repository" class="slide level2">
+<h2>Run it, and add it to the repository</h2>
+<ul>
+<li>Run the script</li>
+<li>Add the requirements <code>pip freeze &gt; requirements.txt</code></li>
+<li>README: <em>how to run it</em>, <em>where the built dataset is</em> (the S3 path)</li>
+<li><code>data/README.md</code>: what the built dataset contains, from which dump, with which keyword</li>
+<li>Commit, push, PR, merge</li>
+</ul>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><code>git status</code>: neither the raw shards nor the built dataset should appear.</p>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="step-4-scale-one-file-at-a-time" class="title-slide slide level1 center">
+<h1>Step 4 — Scale, one file at a time</h1>
+
+</section>
+<section id="the-same-script-on-the-big-shards" class="slide level2">
+<h2>The same script, on the big shards</h2>
+<p>Now the other end of the list: <code>train_00000.parquet</code> (2.3 GB), <code>train_00001.parquet</code> (1.9 GB)…</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/build_dataset.py <span class="at">--subset</span> 20250702.en <span class="at">--keyword</span> data <span class="at">--delete-raw</span> <span class="dt">\</span></span>
+<span id="cb17-2"><a href="" aria-hidden="true" tabindex="-1"></a>   <span class="at">--shards</span> train_00000.parquet</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>On your <strong>4 GB</strong> service. Look at your disk while it downloads: <code>df -h .</code></p>
+<p>What happens? Where do you see it? <strong>Why?</strong></p>
+</section>
+<section id="what-happened" class="slide level2">
+<h2>What happened?</h2>
+<ul>
+<li><em>My services</em> → your service → <strong>Kubernetes</strong> tab / logs</li>
+<li>Look for <code>OOMKilled</code>, <code>exit code 137</code></li>
+<li>The pod was killed by the cluster: it exceeded its RAM limit</li>
+<li>Compressed on disk ≠ in memory; pandas loads everything, as Python objects</li>
+</ul>
+<p>Options: a bigger service or <strong>not loading what you do not need</strong>. Here, we can run a little bigger service to be able to manipulate one shard. <em>If you want to play, there are also solutions to read <strong>row groups</strong> in parquet</em>.</p>
+</section>
+<section id="one-file-at-a-time-one-piece-at-a-time" class="slide level2">
+<h2>One file at a time, one piece at a time</h2>
+<p>Change the script so that the service never holds more than a <strong>piece of one shard</strong> in memory:</p>
+<ul>
+<li>write the reduced output of each shard <strong>as soon as it is done</strong> (local, then S3)</li>
+<li><code>--delete-raw</code> becomes mandatory in practice: 17 GB do not fit on the pod</li>
+<li>if the loop stops, restart where it stopped: skip the shards whose output is already on S3</li>
+</ul>
+<!--
+```python
+import pyarrow.parquet as pq
+
+pf = pq.ParquetFile(path)
+parts = []
+for batch in pf.iter_batches(batch_size=10_000, columns=["id", "title", "url", "text"]):
+    chunk = batch.to_pandas()
+    hit = chunk[chunk["text"].str.contains(args.keyword, case=False)].copy()
+    hit["length"] = hit["text"].str.len()
+    parts.append(hit.drop(columns="text"))
+out = pd.concat(parts)
+out.to_parquet(f"data/processed/{name}", index=False)
+fs.put(f"data/processed/{name}", f"{BUCKET}/wiki/processed/{args.subset}/{name}")
+if args.delete_raw:
+    os.remove(path)
+```
+-->
+</section>
+<section id="loop-over-the-files-with-bash" class="slide level2">
+<h2>Loop over the files with bash</h2>
+<ul>
+<li>Each shard produces one small output on S3</li>
+<li>The built dataset grows shard after shard; the pod stays small</li>
+<li>Commit <code>build_dataset.py</code>, <code>merge.py</code>, <code>run.sh</code>; update the README</li>
+</ul>
+<p>A solution with bash</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb18-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb18-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> <span class="at">-w</span> 0 16<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb18-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="ex">python</span> src/build_dataset.py <span class="at">--subset</span> 20250702.en <span class="at">--keyword</span> data <span class="at">--delete-raw</span> <span class="dt">\</span></span>
+<span id="cb18-5"><a href="" aria-hidden="true" tabindex="-1"></a>        <span class="at">--shards</span> train_000<span class="va">$i</span>.parquet</span>
+<span id="cb18-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb18-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/merge.py   <span class="co"># concatenate the per-shard outputs on S3 into one built dataset</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="delete-your-service" class="slide level2">
+<h2>⚠️ Delete your service</h2>
+<p>Everything on the pod is gone.</p>
+<ul>
+<li>Launch a <strong>new</strong> service</li>
+<li>Get back to a working state from <strong>GitHub + S3 alone</strong></li>
+</ul>
+<p>What did you lose (raw shards? the built dataset? the notebook?) Why? Fix it: commit it, or put it on S3.</p>
+</section></section>
+<section>
+<section id="step-5-other-tools-for-the-same-job" class="title-slide slide level1 center">
+<h1>Step 5 — Other tools for the same job</h1>
+
+</section>
+<section id="the-toolbox" class="slide level2">
+<h2>The toolbox</h2>
+<p>The same treatment, without pandas. Each of these tools <strong>streams</strong> by design.</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>What it is</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>HF CLI</strong> (<code>hf</code>)</td>
+<td>download from the terminal</td>
+<td>scripts in bash</td>
+</tr>
+<tr class="even">
+<td><strong><code>mc</code></strong></td>
+<td>S3 client in the terminal</td>
+<td>move files without Python</td>
+</tr>
+<tr class="odd">
+<td><strong>DuckDB</strong></td>
+<td>SQL engine on files (CLI + Python)</td>
+<td>look at a parquet, aggregate, filter</td>
+</tr>
+<tr class="even">
+<td><strong>polars</strong></td>
+<td>a lazy DataFrame library</td>
+<td>a pandas replacement that scales</td>
+</tr>
+<tr class="odd">
+<td><strong>xan</strong></td>
+<td>CSV toolkit in Rust</td>
+<td>huge CSVs from the shell</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="download-and-upload-from-the-terminal" class="slide level2">
+<h2>Download and upload from the terminal</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-U</span> huggingface_hub</span>
+<span id="cb19-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">hf</span> download omarkamali/wikipedia-monthly 20250702.en/train_00013.parquet <span class="dt">\</span></span>
+<span id="cb19-3"><a href="" aria-hidden="true" tabindex="-1"></a>   <span class="at">--repo-type</span> dataset <span class="at">--local-dir</span> ./data/raw</span>
+<span id="cb19-4"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mc</span> cp data/processed/wiki_data.parquet s3/group-x/wiki/processed/</span>
+<span id="cb19-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mc</span> ls s3/group-x/wiki/processed/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Compare with <code>build_dataset.py</code>: what does the Python script add? (the downsizing, arguments, idempotence, logging)</p>
+</section>
+<section id="look-at-a-parquet-without-python-duckdb" class="slide level2">
+<h2>Look at a parquet without Python: DuckDB</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> https://install.duckdb.org <span class="kw">|</span> <span class="fu">sh</span></span>
+<span id="cb20-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="va">F</span><span class="op">=</span>data/raw/20250702.en/train_00016.parquet</span>
+<span id="cb20-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"DESCRIBE SELECT * FROM '</span><span class="va">$F</span><span class="st">';"</span></span>
+<span id="cb20-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"SELECT id, title, url, substr(text,1,200) AS extract FROM '</span><span class="va">$F</span><span class="st">' LIMIT 5;"</span></span>
+<span id="cb20-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"SELECT count(*), avg(length(text)), max(length(text)) FROM '</span><span class="va">$F</span><span class="st">';"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="the-extraction-three-other-ways" class="slide level2">
+<h2>The extraction, three other ways</h2>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">DuckDB (SQL)</a></li><li><a href="#tabset-1-2">polars (lazy)</a></li><li><a href="#tabset-1-3">xan (CSV)</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb21-2"><a href="" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> duckdb.sql(<span class="st">"""</span></span>
+<span id="cb21-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT id, title, url, length(text) AS length</span></span>
+<span id="cb21-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM read_parquet('data/raw/20250702.en/train_00000.parquet')</span></span>
+<span id="cb21-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE text LIKE '</span><span class="sc">%d</span><span class="st">ata%'</span></span>
+<span id="cb21-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).df()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Also on all the raw shards at once with a glob <code>'data/raw/20250702.en/*.parquet'</code>, and directly on S3 with the <code>httpfs</code> extension.</p>
+</div>
+<div id="tabset-1-2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb22-2"><a href="" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> (pl.scan_parquet(<span class="st">"data/raw/20250702.en/train_00000.parquet"</span>)</span>
+<span id="cb22-3"><a href="" aria-hidden="true" tabindex="-1"></a>         .<span class="bu">filter</span>(pl.col(<span class="st">"text"</span>).<span class="bu">str</span>.contains(<span class="st">"data"</span>))</span>
+<span id="cb22-4"><a href="" aria-hidden="true" tabindex="-1"></a>         .select([<span class="st">"id"</span>, <span class="st">"title"</span>, <span class="st">"url"</span>, pl.col(<span class="st">"text"</span>).<span class="bu">str</span>.len_chars().alias(<span class="st">"length"</span>)])</span>
+<span id="cb22-5"><a href="" aria-hidden="true" tabindex="-1"></a>         .collect(streaming<span class="op">=</span><span class="va">True</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"COPY (SELECT id, title, url, text FROM '</span><span class="va">$F</span><span class="st">') TO 'wiki16.csv';"</span></span>
+<span id="cb23-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">xan</span> count wiki16.csv</span>
+<span id="cb23-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">xan</span> search <span class="at">-s</span> text data wiki16.csv <span class="kw">|</span> <span class="ex">xan</span> select id,title,url <span class="kw">|</span> <span class="ex">xan</span> count</span>
+<span id="cb23-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">xan</span> map <span class="st">'len(text) as length'</span> wiki16.csv <span class="kw">|</span> <span class="ex">xan</span> hist <span class="at">-s</span> length</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>Run one of them on the 2.3 GB shard, on the 4 GB service. Does it hold?</p>
+</section></section>
+<section>
+<section id="wrap-up" class="title-slide slide level1 center">
+<h1>Wrap-up</h1>
+
+</section>
+<section id="peer-re-execution" class="slide level2">
+<h2>Peer re-execution</h2>
+<p>Swap repositories with another group.</p>
+<p>On a <strong>fresh</strong> service, run the other group’s pipeline <strong>from their README only</strong>, without asking them anything.</p>
+<p>Open an <strong>issue</strong> on their repository:</p>
+<ul>
+<li>what broke, what was unclear</li>
+<li>how long it took</li>
+<li>one suggestion</li>
+</ul>
+</section>
+<section id="debrief" class="slide level2">
+<h2>Debrief</h2>
+<div title="Three things to remember">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Three things to remember</strong></p>
+</div>
+<div class="callout-content">
+<ol type="1">
+<li>The pod is compute, not storage</li>
+<li>Do not load what you do not need</li>
+<li>If it is not in Git or on S3, it does not exist (at least, in the long time)</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Kill your services.</strong></p>
+</section>
+<section id="resources" class="slide level2">
+<h2>Resources</h2>
+<ul>
+<li><a href="https://book.the-turing-way.org/">The Turing Way — Guide for Reproducible Research</a></li>
+<li><a href="https://docs.onyxia.sh/user-doc/user-guide">Onyxia user guide</a></li>
+<li><a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012232">Stoudt et al.&nbsp;(2024). Ten simple rules for building and maintaining a responsible data science workflow. PLOS Comp Bio</a></li>
+<li><a href="https://library.ucsd.edu/research-and-collections/research-data/plan-and-manage/data-management-best-practices.html">UCSD — Data management best practices</a></li>
+<li><a href="https://vita.had.co.nz/papers/tidy-data.pdf">Wickham (2014). Tidy data. JSS</a></li>
+<li><a href="http://www.idris.fr/media/su/idrischeatsheet.pdf">IDRIS cheat sheet (Jean Zay)</a></li>
+<li><a href="https://swcarpentry.github.io/shell-novice/">Software Carpentry — The Unix Shell</a></li>
+<li><a href="https://doi.org/10.1371/journal.pcbi.1004947">Perez-Riverol et al.&nbsp;(2016). Ten Simple Rules for Taking Advantage of Git and GitHub</a></li>
+</ul>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>CSS Bootcamp 2026 — Day 2 — Data Management &amp; Compute</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

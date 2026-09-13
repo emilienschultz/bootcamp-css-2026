@@ -1,0 +1,1149 @@
+---
+title: "Data Management & Compute"
+subtitle: "CSS Bootcamp — Day 2"
+author: "Émilien Schultz — emilien.schultz@ensae.fr"
+date: "2026-09-17"
+format:
+    revealjs:
+        slide-number: true
+        theme: simple
+        transition: slide
+        highlight-style: github
+        code-line-numbers: false
+        smaller: false
+        footer: "CSS Bootcamp 2026 — Day 2 — Data Management & Compute"
+        toc: false
+---
+
+# Forewords
+
+## Who am I
+
+- **Émilien Schultz**
+    - Research engineer / data scientist at CREST
+    - Research facilitator: I help on data & code
+    - *emilien.schultz@ensae.fr* — office 4044
+
+::: {.callout-tip title="Today's rule"}
+Everything we do today has to survive **the loss of your computer**. Scientific computation needs robustness, not brittleness.
+:::
+
+## Tree questions
+
+- Who are you?
+- What is the **largest dataset** you ever opened?
+- Did you ever meet limit to run scripts/computation?
+
+## Programme
+
+1. The new era of scientific computing
+2. Reproducibility, open science & DevOps
+3. Organising a data project
+4. Storage vs compute: sizes, HPC
+5. Onyxia (live)
+6. Secrets & security hygiene
+7. SSH (live)
+8. Hands on (mainly afternoon)
+
+
+## The philosophy of the day
+
+The **unholy trinity**
+
+- Computational service (**compute**)
+- Scripts / software / treatments (**code**)
+- **Data**
+
+**Each aspect has specific tools/best practices.**
+
+
+## And now, also AI
+
+Is it a fourth dimension ? 
+
+- Models
+- Workflow
+- Tooling
+- ...
+
+::: {.callout-tip title="What does it change ?"}
+It changes a lot of practices, but not the general philosophy or architecture we are going to see today.
+:::
+
+
+# The new era of scientific computing
+
+## New skills in computational social science?
+
+- **New volumes** of data in fields that were not computational: text, web, admin data, digital traces
+- **Higher expectations** of reproducibility and long-term storage (journals, funders, DMPs)
+- **New tools** (LLMs, embeddings, large models) need GPUs and remote compute
+- More and more **collaboration**: several people, several machines, several months
+
+## What changes when you leave your laptop
+
+- Nothing is persistent by default
+- No mouse, no GUI: **command line**
+- Resources are requested, shared, and (sometimes) paid
+- Your credentials become the problem
+- Everything has to be **written down**: scripts, not clicks
+
+*This is what makes it reproducible.*
+
+## Where could you run your code?
+
+- **Local computer**
+    - limit of resources / not collaborative / messy
+- **Cloud services** (Google Colab, Kaggle)
+    - proprietary, limited, black box
+- **Institutional services** (Onyxia datalab, Jean Zay, CREST server)
+    - conditions of access, availability
+    - but shared storage, big machines, GPUs
+
+**How to size resources?** (later)
+
+
+
+# Reproducibility, open science & DevOps
+
+## What is reproducibility
+
+A result or project is never a one shot.
+
+> A result is reproducible when the same analysis steps performed on the same dataset consistently produce the same answer.
+
+**...on another machine, by another person, later.**
+
+## Science loves reproducibility
+
+![](./img/howscientist.png){fig-align="center"}
+
+## Different flavours of reproducibility
+
+![](./img/differentrepro.jpg){fig-align="center"}
+
+## What it entails to be reproducible
+
+Be able to walk the path again: connecting data, software and questions
+
+![](./img/repro.jpg){fig-align="center"}
+
+## Openness
+
+Both for data and code, create the possibility of reproducibility
+
+[![](./img/datafriend.jpeg){fig-align="center"}](https://www.smbc-comics.com/comic/science-fictions)
+
+*Not always possible for data - especially in social sciences with sensitive informations*
+
+## What is open science
+
+- Clear methodologies
+- Data accessibility: **FAIR** (Findable, Accessible, Interoperable, Reusable)
+- Reusable software (open code, open formats)
+
+![](./img/faire.svg){fig-align="center" height="250px"}
+
+## How to conciliate privacy with reproducibility
+
+- [As open as possible, as closed as necessary](https://rea.ec.europa.eu/open-science_en)
+- Anonymise / pseudonymise
+- Aggregate
+- Synthetic data
+
+![](./img/privacy.png){fig-align="center" height="300px"}
+
+## How to achieve it: the minimal kit
+
+1. A **Git repository** with a `README.md`: what, how to run, where the data is
+2. A **pinned environment**: `requirements.txt` (or `pyproject.toml`), Python version
+3. **Scripts**, not only notebooks
+4. **Data separated from code**: raw data immutable, every transformation scripted
+5. Random seeds, logged parameters, dated outputs
+
+*This is the deliverable of the afternoon.*
+
+## Scripts, notebooks and packages
+
+- Notebooks allow literate programming
+    - very useful for exploration / prototyping
+- Scripts are better for stability, automation, remote execution
+- A pathway: notebook → script → package
+
+**Rule of thumb**: if it runs more than once, it is a script.
+
+## Pin your environment (for information)
+
+A script depends on a Python version and packages. Freeze them in a **virtual environment**.
+
+```bash
+python -m venv .venv                 # create (or: uv venv)
+source .venv/bin/activate            # activate
+pip install pandas polars duckdb     # install what you need
+pip freeze > requirements.txt        # record exact versions
+```
+
+On a new machine:
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+::: {.callout-note}
+`.venv/` goes in `.gitignore`; `requirements.txt` goes in Git. Alternatives: `conda`, `uv`, `pyproject.toml`.
+:::
+
+## The DevOps connection
+
+**DevOps** = practices that let software teams ship code to servers reliably
+
+- version control, automated tests, CI/CD
+- containers, infrastructure as code
+- logs, monitoring
+
+**MLOps** = the same for data and models: data versioning, pipelines, experiment tracking ; **LLMOps**, you guess...
+
+## What research borrows from it
+
+A new terminology that is invading computational practice
+
+- **Containers** (Docker image): a frozen environment
+- **Pipelines**: a Makefile / `run.sh` / snakemake with a clear order of steps
+- **Logs**: know what happened when you were not looking
+- **CI**: GitHub Actions running tests on each change
+
+> Research workflows should be designed with recomputation in mind
+
+## New vocabulary, new collaborations
+
+You will work with research engineers, data engineers, sysadmins of the datalab / HPC.
+
+Knowing their words (*pod, bucket, job, image, quota*) is what makes a ticket answered in one exchange instead of five.
+
+## The reproducibility ladder
+
+| Level | What you have |
+|---|---|
+| 0 | a notebook on a laptop |
+| 1 | script + README + Git |
+| 2 | + pinned environment + data on shared storage |
+| 3 | + container / CI |
+| 4 | + workflow manager on HPC |
+
+
+# Organising a data project
+
+## Rule 0: know your data
+
+- Have a look at your data
+    - duplicates, empty data, encoding
+- Before starting complex treatments
+    - do simple treatments
+    - ask yourself if the question and the data match
+
+![](./img/garbagein.jpeg){fig-align="center" height="250px"}
+
+## Rule 1: structuring a project
+
+- **Separate code from data**
+    - different logic, different tools, different sizes, different rights
+- **Document / comment** your productions
+    - be explicit (variables, README)
+    - *yes, it is boring, but useful*
+- **Modularise**: create distinct elements
+    - one file per step
+    - functions rather than repeated code
+
+## There will always be another Monday
+
+![](./img/comment.png){fig-align="center"}
+
+## Rule 2: a common file system
+
+```
+project-name/
+│
+├── README.md              # what, how to run, where is the data
+├── requirements.txt       # pinned environment
+├── .gitignore             # data/, .env, outputs
+├── data/                  # NOT in git
+│   ├── README.md          # -> where the data really is
+│   ├── raw/               # original, immutable
+│   ├── intermediate/
+│   └── processed/         # analysis-ready
+├── src/                   # one script per step
+├── docs/
+└── reports/
+    ├── figures/
+    └── tables/
+```
+
+## Rule 2 bis: paths
+
+::: {.callout-important title="Bad"}
+```python
+df = pd.read_csv("/Users/emilien/Downloads/final2.csv")
+```
+:::
+
+::: {.callout-tip title="Good"}
+```python
+from pathlib import Path
+import os
+DATA = Path(os.environ.get("DATA_DIR", "data"))
+df = pd.read_parquet(DATA / "raw" / "wiki.parquet")
+```
+:::
+
+Paths are configuration, not code.
+
+## Rule 3: organise the code for collaboration
+
+- One script = one step (if you want to go further, a `run.sh` / `Makefile` chains them-
+- Parameters as CLI arguments or a config file, never hard-coded (so you can share your code)
+- Log what you do (`print` is a start, `logging` is better)
+- Git: one branch per person/feature, small commits, PR + review
+- Issues as the shared to-do list
+- Conventions > tools: write them in the README
+
+## The data lifecycle : a specific philosophy
+
+![](./img/diagram-data-workflow-steps.png){fig-align="center"}
+
+## Where to store the data
+
+**During the project**
+
+- Laptop: temporary
+- Institutional solutions
+- Cloud solutions: with care (privacy)
+
+**After the project**
+
+- Zenodo, Figshare, Hugging Face datasets, data.gouv.fr
+
+## Ideally, a Data Management Plan
+
+[Data management plan](https://library.ucsd.edu/research-and-collections/research-data/plan-and-manage/data-management-best-practices.html): a document that lists the data and how you handle it
+
+- What types of data? What formats?
+- What **volume**?
+- Where stored **during**? Where **after**?
+- Who can access it? Privacy?
+- Naming and versioning strategy?
+
+
+## Rule 4: accept to spend time on data preparation
+
+![](./img/iceberg.png){fig-align="center"}
+
+## Avoid correcting your data manually
+
+Build a workflow — write scripts
+
+![](./img/datafix.jpg){fig-align="center"}
+
+## Let's talk about data format
+
+Format is both information & affordance
+
+[![](./img/dataloss.png){fig-align="center"}](https://xkcd.com/1683/)
+
+## What are the best data formats
+
+![](./img/normformat.png){fig-align="center"}
+
+## Formats: a practical map
+
+| Format | Pros | Cons |
+|---|---|---|
+| **CSV** | universal, human-readable | no types, encoding & separators, slow, big |
+| **JSON / JSONL** | nested, streams line by line | verbose |
+| **Parquet** | typed, compressed, columnar, splittable | binary, needs a library |
+| **SQLite / DuckDB** | relational, joins, SQL | one file, one writer |
+
+**Suggestion**: open format + think about how you will *access* it.
+
+
+
+## Data architecture: aim for tidy data
+
+- Separate raw data from transformed data
+- Move from unstructured to structured
+- Tidy data
+
+![](./img/tidydata.png){fig-align="center"}
+
+# Storage vs compute
+
+## What kind of computation do you need?
+
+| Resource | What it limits |
+|---|---|
+| **CPU** (cores) | speed, parallelism |
+| **RAM** | the size of what you can hold: **the true bottleneck for data** |
+| **Disk** | local = ephemeral & fast; object storage = persistent & shared |
+| **GPU** | deep learning, embeddings, LLMs |
+| **Network** | moving 17 GB is not free |
+
+## How to think about sizes
+
+| Size | Example | Consequence |
+|---|---|---|
+| 1 MB | a survey | anything works |
+| 100 MB | a year of admin data | Excel breaks, pandas is fine |
+| 1 GB | one Wikipedia shard, compressed | think about RAM |
+| 10–100 GB | full Wikipedia, a month of Reddit | stream or sample, remote machine |
+| 1 TB+ | | you need a data engineer |
+
+## Rules of thumb
+
+- RAM needed ≈ **3–10×** the compressed parquet size (text)
+- If it does not fit: **stream** (row groups, chunks, lazy engines) or **sample**
+- Favour small data if you can
+
+![](./img/smalldata.png){fig-align="center" height="300px"}
+
+## Otherwise
+
+**Solution 1: reduce your data**
+
+- work on a subset / sample
+- read only the columns you need
+- batch
+
+**Solution 2: parallelise**
+
+- more cores on one machine (polars, DuckDB, ...)
+- more machines (Dask, Spark, HPC jobs)
+- dedicated tools: [xan](https://github.com/medialab/xan) for CSV
+
+## Where to run: a decision tree
+
+- Fits in your laptop RAM, runs in minutes → **laptop**
+- Needs more RAM / a GPU / hours → **Onyxia datalab**
+- Needs days, many GPUs, thousands of jobs → **HPC** (Jean Zay, GENCI)
+
+**Start small, then scale**
+
+> This process of scaling out the analysis can often be daunting, particularly for researchers new to computational methods
+
+## What is HPC
+
+- A **cluster** of nodes with a shared file system
+- A **job scheduler** (SLURM): you *submit* a script, you do not *run* it
+- Queues, allocations, quotas, no GUI: CLI only
+- Onyxia / Kubernetes is the middle ground: interactive, containerised, self-service
+
+## Know your CLI: Jean Zay
+
+[![](./img/jeanzay.png){fig-align="center"}](http://www.idris.fr/media/su/idrischeatsheet.pdf)
+
+## The scale ladder
+
+1. One file, on a sample → does the code work?
+2. One file, full size → does it fit in memory? how long?
+3. All files, one machine → parallelise
+4. All files, many machines → HPC
+
+*Measure at each step: time, peak memory.*
+
+::: {.callout-note}
+A 32 GB pod left running for a week is not free. **Kill your services.**
+:::
+
+# Onyxia
+
+## What is Onyxia
+
+- An open-source **datalab** platform developed by INSEE
+- Instances:
+    - GENES: [https://onyxia.lab.groupe-genes.fr](https://onyxia.lab.groupe-genes.fr)
+    - INSEE SSPCloud: [https://datalab.sspcloud.fr](https://datalab.sspcloud.fr)
+
+[User documentation](https://docs.onyxia.sh/user-doc/user-guide)
+
+## A common entry for different services
+
+![](img/onyxia.png){fig-align="center"}
+
+## What is a service
+
+- A **container** (Docker image: OS + Python + Jupyter/VS Code/RStudio...)
+- running in a **pod** on a cluster
+- with the **resources you asked for** (CPU, RAM, GPU, disk)
+- **ephemeral**: when it stops, its local disk is gone
+
+::: {.callout-important}
+The pod is compute, **not storage**.
+:::
+
+## How to launch one (live)
+
+1. Catalogue → `vscode-python` or `jupyter-python`
+2. Configure: resources, persistence, init script, Git, S3
+3. Launch → wait → open
+4. **My services**: see, delete, read the logs
+
+## Parameters that matter
+
+- **Resources**: CPU request / limit, **RAM request / limit**, GPU
+- **Persistence**: a volume (survives a restart of the service, not its deletion)
+- **Init script**: install packages at start
+- **Git**: a repository cloned at start, your name/email
+- **S3**: credentials injected as environment variables
+
+::: {.callout-tip}
+The **Kubernetes** tab shows the pod events. This is where `OOMKilled` appears.
+:::
+
+## How to access storage
+
+- The **file browser** ("My files"): buckets, upload/download
+- In the terminal: the `mc` client
+
+```bash
+mc ls s3/
+mc cp data/wiki.parquet s3/my-bucket/wiki/
+mc cp -r s3/my-bucket/wiki/ data/
+```
+
+- From Python: S3 is a URL + credentials in the environment
+
+## S3 from Python
+
+```python
+import os
+import pandas as pd
+
+storage_options = {
+    "client_kwargs": {"endpoint_url": os.environ["AWS_S3_ENDPOINT"]},
+    "key": os.environ["AWS_ACCESS_KEY_ID"],
+    "secret": os.environ["AWS_SECRET_ACCESS_KEY"],
+    "token": os.environ["AWS_SESSION_TOKEN"],
+}
+df = pd.read_parquet("s3://my-bucket/wiki/simple.parquet",
+                     storage_options=storage_options)
+```
+
+::: {.callout-warning}
+Tokens **expire** (≈ 24h). Renew from *My account → Connect to storage*.
+:::
+
+## What survives what
+
+| Where | Service restarts | Service deleted | Datalab down |
+|---|---|---|---|
+| file on the pod | ✗ | ✗ | ✗ |
+| persistent volume | ✓ | ✗ | ✗ |
+| S3 bucket | ✓ | ✓ | ✓ (backup) |
+| code on GitHub | ✓ | ✓ | ✓ |
+
+**This is the lesson of the afternoon, stated up front.**
+
+## Hands on (5 min)
+
+- Connect to [https://onyxia.lab.groupe-genes.fr](https://onyxia.lab.groupe-genes.fr)
+- Launch a `vscode-python` service with **2 CPU / 4 GB RAM**
+- Open a terminal and run
+
+```bash
+nproc
+free -h
+df -h .
+env | grep AWS
+```
+
+# Secrets & security hygiene
+
+## Never commit
+
+- S3 keys, Hugging Face tokens, GitHub tokens
+- SSH private keys
+- `.env` files, config with passwords
+- Personal data
+
+**Use** `.gitignore` + environment variables + a `.env.example` without values.
+
+
+## Tokens, passwords, keys
+
+- **Password**: you, everywhere, forever → the worst
+- **Token**: a service, a scope, an expiry → prefer read-only, short
+- **Key pair**: a public half you share, a private half you never share
+
+If you leak something: **revoke first**, then clean the history. Prevention is much cheaper.
+
+# SSH
+
+## What is SSH
+
+- **S**ecure **SH**ell: an encrypted remote terminal
+- The universal door to servers and HPC
+- (Also one way Git can talk to GitHub; today we use HTTPS + token)
+
+```bash
+ssh eschultz@cca.in2p3.fr
+```
+
+## Command line: a reminder
+
+![](./img/shell_command_syntax.svg){fig-align="center" height="150px"}
+
+- `pwd`, `ls`, `cd`, `mkdir -p`, `cp`, `mv`, `rm -r`, `cat`, `head`
+- `man command` / `command --help`
+- `|` to chain, `>` to write
+
+![](./img/tar.png){fig-align="center" height="220px"}
+
+## From commands to a script
+
+A file with a `.sh` extension, one command per line: this is your pipeline.
+
+```bash
+#!/bin/bash
+# run.sh — the whole treatment in one command
+set -e                               # stop at the first error
+SHARDS=${1:-"0 1"}                   # first argument, default "0 1"
+python src/download.py --shards $SHARDS
+python src/extract.py  --shards $SHARDS --keyword data
+python src/build.py
+```
+
+- First line (the **shebang**) says which interpreter to use
+- `chmod +x run.sh` then `./run.sh "0 1 2"` (or `bash run.sh`)
+- `$1`, `$2`: the arguments; `$VAR`: a variable
+
+## Create a key
+
+```bash
+ssh-keygen -t ed25519 -C "name@ensae.fr"
+ls ~/.ssh/
+# id_ed25519      -> private, never leaves your machine
+# id_ed25519.pub  -> public, give it to servers and GitHub
+chmod 600 ~/.ssh/id_ed25519
+```
+
+Register the public key on the server (on `~/.ssh/authorized_keys`)
+
+Then `ssh user@SERVER` asks for nothing.
+
+## Use it
+
+TO DO : CREATE A VM + PUT THE IP
+
+```bash
+ssh user@SERVER                      # connect
+scp file.py user@SERVER:~/project/    # copy a file
+```
+
+`~/.ssh/config` to give names to servers:
+
+```
+Host crest
+    HostName SERVER
+    User user
+    IdentityFile ~/.ssh/id_ed25519
+```
+
+then `ssh crest`.
+
+## Once on the server
+
+- `htop`, `nproc`, `free -h`, `df -h`, `du -sh *`: know the machine
+- Keep a job alive after disconnecting: `nohup python script.py &` or **`tmux`**
+- Reach a remote Jupyter: `ssh -L 8888:localhost:8888 crest`
+- Run your pipeline there: `git clone https://github.com/ORG/repo.git && ./run.sh`
+
+
+# Code versioning: recap
+
+## Git is for code/text, not data
+
+::: {.callout-important title="Code & Data"}
+Git is not designed to version data
+
+Data goes to S3 / Zenodo / [Git LFS](https://git-lfs.com/). Git tracks **how** to get and transform it.
+:::
+
+## `.gitignore`: what Git must not see
+
+A text file at the root of the repository, one pattern per line.
+
+```gitignore
+# data and outputs: on S3, not in Git
+data/
+reports/figures/
+*.parquet
+*.csv
+
+# secrets
+.env
+
+# environments and caches
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+```
+
+- Write it **before** the first commit: a file already tracked stays tracked
+- Keep `data/README.md` tracked: `!data/README.md`
+- `git status` shows what is still visible
+
+## Branches, merges, conflicts
+
+- A **branch** is a parallel line of commits: `git switch -c name/feature`
+- A **merge** (via a PR) brings it back into `main`
+- A **conflict** happens when two branches changed the same lines
+
+```
+<<<<<<< HEAD
+n_bins = 50
+=======
+n_bins = 100
+>>>>>>> alice/histogram
+```
+
+1. Open the file, keep what you want, remove the markers
+2. `git add FILE` then `git commit`
+3. Small, frequent PRs → fewer conflicts. Pull `main` often.
+
+## The states of a file
+
+![](./img/git-committing.svg){fig-align="center" height="500px"}
+
+## The complete workflow
+
+![](./img/githubflow.png){fig-align="center"}
+
+## Connect to GitHub with a token
+
+Git talks to GitHub over **HTTPS**. Your password does not work: you need a **personal access token**.
+
+1. GitHub → *Settings → Developer settings → Personal access tokens → Fine-grained*
+2. Scope: your group repository, **Contents: read & write**, expiry: one week
+3. Copy it once; it is a secret ([doc](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens))
+4. Use it as the password when Git asks, and let Git remember it:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "you@ensae.fr"
+git config --global credential.helper store   # remembers the token on this service
+git clone https://github.com/ORG/group-X.git  # username + token as password
+```
+
+::: {.callout-warning}
+The token is stored in clear in `~/.git-credentials` on the pod. It dies with the pod. Never paste it in a file of the repository.
+:::
+
+
+
+# Hands on
+
+
+## The challenge
+
+> Deploy a **reproducible** treatment of a **large dataset** on Onyxia, with a strict separation between **code** (GitHub), **storage** (S3) and **compute** (an ephemeral service).
+> And keep it small :)
+
+Dataset: [Wikipedia Monthly](https://huggingface.co/datasets/omarkamali/wikipedia-monthly) on Hugging Face
+
+## Have a look on the dataset
+
+- Were is the data ? 
+- What is HuggingFace ? 
+- What is the format ?
+
+## What is a Parquet file
+
+- **Columnar**: read only the columns you need
+- **Typed** schema embedded in the file
+- **Compressed** (snappy, zstd): 3–10× smaller than CSV
+- Split in **row groups**: read a slice without loading everything
+- The format of data lakes, Hugging Face, Spark, DuckDB, polars...
+
+::: {.callout-warning title="On disk ≠ in memory"}
+A 2 GB parquet of text can need **6–10 GB of RAM** once loaded in pandas.
+:::
+
+## The dataset
+
+| Subset | Files | Total | Notes |
+| `20250702.en` | 17 shards | 17.3 GB | shard 0 = **2.3 GB** |
+
+Fields: `id`, `url`, `title`, `text` (clean plain text). Licence CC-BY-SA.
+
+**Today: `20250702.en`.** Shards go from `train_00016.parquet` (576 MB) up to `train_00000.parquet` (2.3 GB).
+
+
+## The steps
+
+1. **Launch a service, update the common repository**
+2. **A notebook**: download one shard, first analytics
+3. **A script**: download the shards, keep the articles mentioning a keyword, upload the **built dataset** on S3
+4. **Scale**: the same script on the big English shards, one file at a time, on a low-memory service
+5. **Other tools** for the same job
+
+
+::: {.callout-important title="Rule of the afternoon"}
+At some point I will ask you to delete your service and you will need to reset everything, so you need to keep track :)
+:::
+
+# Step 1 — A service and a common repository
+
+## Setup
+
+::: {.callout-tip title="Checklist"}
+- [ ] One GitHub repository per group with a basic organization and a `README.md`
+- [ ] A GitHub personal access token with write access to the group repository
+- [ ] Each member launches a `vscode-python` service with **2 CPU / 4 GB RAM**, S3 enabled
+:::
+
+## Take your service in hand
+
+- Clone the repository
+- Have a look at the repository structure and the README skeleton
+- Each member: add your name to the README in a new branch, commit, push, open a PR, merge one of your teammates' PR
+
+<!--
+```bash
+git clone https://github.com/ORG/group-X.git
+cd group-X
+git switch -c yourname/readme
+# edit README.md
+git add README.md && git commit -m "add my name"
+git push -u origin yourname/readme
+```
+-->
+
+::: {.callout-note}
+Check: does `git status` show your `data/` folder? It should not.
+:::
+
+# Step 2 — A notebook on one shard
+
+## Download one shard, in Python
+
+Read the [dataset card](https://huggingface.co/datasets/omarkamali/wikipedia-monthly): fields, licence, shards. Then, in a notebook:
+
+- See the HF CLI
+- Find a way to download **the smallest shard**: `20250702.en/train_00016.parquet` (576 MB) - Python or CLI
+- Where did the file land? How big is it? (`ls -lh data/raw/...`)
+
+<!--
+```python
+from huggingface_hub import hf_hub_download
+
+path = hf_hub_download(
+    repo_id="omarkamali/wikipedia-monthly",
+    repo_type="dataset",
+    filename="20250702.en/train_00016.parquet",
+    local_dir="data/raw",
+)
+print(path)
+```
+-->
+
+## First analytics
+
+In a notebook, with `pandas`:
+
+- load the shard, look at the columns and a few rows
+- plot the histogram of text lengths → save it in `reports/figures/`
+- print the title of the longest article
+- extract the articles mentioning `"data"` → `data/processed/`
+
+<!--
+```python
+import pandas as pd
+df = pd.read_parquet(path)
+df["n"] = df["text"].str.len()
+df["n"].plot.hist(bins=50, logy=True)
+```
+-->
+
+## Update the repository
+
+- The notebook goes to `notebooks/`, the figure to `reports/figures/`
+- The data does **not** go to Git: check `git status`
+- Commit, push, PR, review by a teammate, merge
+
+::: {.callout-tip}
+Write in the README what the notebook does and how to get the shard.
+:::
+
+# Step 3 — A script: download, downsize, upload
+
+## From the notebook to a script
+
+The notebook proved the idea on one shard. Now a **script** runs the whole pipeline:
+
+`src/build_dataset.py`
+
+1. takes a subset name, a list of shards and a keyword as arguments
+2. **downloads** each shard from HF (local, `data/raw/`)
+3. **downsizes**: keeps `id, title, url, length` (and `text`?) of the articles mentioning the keyword
+4. **builds** one dataset from all the shards → `data/processed/wiki_<keyword>.parquet`
+5. **option** `--delete-raw`: deletes the raw shard once loaded (17 GB do not fit on the pod)
+
+Raw shards are disposable. The built dataset is what matters.
+
+## Downsize
+
+- How much smaller is the built dataset than the raw shards? (`ls -lh`)
+- What do you keep: the full `text` or only its length? What do you lose?
+- Is it still useful to someone who did not see the raw data? → document it in `data/README.md`
+
+<!--
+```python
+import argparse, os, pandas as pd
+from huggingface_hub import hf_hub_download
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--subset", default="20250702.en")
+parser.add_argument("--shards", nargs="+", required=True)
+parser.add_argument("--keyword", default="data")
+parser.add_argument("--delete-raw", action="store_true",
+                    help="delete the raw shard once loaded")
+args = parser.parse_args()
+
+parts = []
+for name in args.shards:
+    path = hf_hub_download("omarkamali/wikipedia-monthly", repo_type="dataset",
+                           filename=f"{args.subset}/{name}", local_dir="data/raw")
+    df = pd.read_parquet(path)
+    if args.delete_raw:
+        os.remove(path)
+    hit = df[df["text"].str.contains(args.keyword, case=False)].copy()
+    hit["length"] = hit["text"].str.len()
+    parts.append(hit[["id", "title", "url", "length"]])
+    print(name, len(df), "->", len(hit))
+
+out = pd.concat(parts)
+out.to_parquet(f"data/processed/wiki_{args.keyword}.parquet", index=False)
+```
+-->
+
+## Upload the built dataset on S3
+
+- Modify the script to upload the built dataset on a bucket once it is completed.
+- Read it back from S3 in a notebook
+
+<!--
+```python
+import os, s3fs
+
+fs = s3fs.S3FileSystem(
+    client_kwargs={"endpoint_url": "https://" + os.environ["AWS_S3_ENDPOINT"]},
+    key=os.environ["AWS_ACCESS_KEY_ID"],
+    secret=os.environ["AWS_SECRET_ACCESS_KEY"],
+    token=os.environ["AWS_SESSION_TOKEN"],
+)
+BUCKET = "group-x"
+fs.put(f"data/processed/wiki_{args.keyword}.parquet",
+       f"{BUCKET}/wiki/processed/wiki_{args.keyword}_{args.subset}.parquet")
+print(fs.ls(f"{BUCKET}/wiki/processed"))
+```
+-->
+
+## Run it, and add it to the repository
+
+- Run the script
+- Add the requirements `pip freeze > requirements.txt`
+- README: *how to run it*, *where the built dataset is* (the S3 path)
+- `data/README.md`: what the built dataset contains, from which dump, with which keyword
+- Commit, push, PR, merge
+
+::: {.callout-note}
+`git status`: neither the raw shards nor the built dataset should appear.
+:::
+
+# Step 4 — Scale, one file at a time
+
+## The same script, on the big shards
+
+Now the other end of the list: `train_00000.parquet` (2.3 GB), `train_00001.parquet` (1.9 GB)...
+
+```bash
+python src/build_dataset.py --subset 20250702.en --keyword data --delete-raw \
+   --shards train_00000.parquet
+```
+
+On your **4 GB** service. Look at your disk while it downloads: `df -h .`
+
+What happens? Where do you see it? **Why?**
+
+## What happened?
+
+- *My services* → your service → **Kubernetes** tab / logs
+- Look for `OOMKilled`, `exit code 137`
+- The pod was killed by the cluster: it exceeded its RAM limit
+- Compressed on disk ≠ in memory; pandas loads everything, as Python objects
+
+Options: a bigger service or **not loading what you do not need**. Here, we can run a little bigger service to be able to manipulate one shard. *If you want to play, there are also solutions to read  **row groups** in parquet*.
+
+## One file at a time, one piece at a time
+
+Change the script so that the service never holds more than a **piece of one shard** in memory:
+
+- write the reduced output of each shard **as soon as it is done** (local, then S3)
+- `--delete-raw` becomes mandatory in practice: 17 GB do not fit on the pod
+- if the loop stops, restart where it stopped: skip the shards whose output is already on S3
+
+<!--
+```python
+import pyarrow.parquet as pq
+
+pf = pq.ParquetFile(path)
+parts = []
+for batch in pf.iter_batches(batch_size=10_000, columns=["id", "title", "url", "text"]):
+    chunk = batch.to_pandas()
+    hit = chunk[chunk["text"].str.contains(args.keyword, case=False)].copy()
+    hit["length"] = hit["text"].str.len()
+    parts.append(hit.drop(columns="text"))
+out = pd.concat(parts)
+out.to_parquet(f"data/processed/{name}", index=False)
+fs.put(f"data/processed/{name}", f"{BUCKET}/wiki/processed/{args.subset}/{name}")
+if args.delete_raw:
+    os.remove(path)
+```
+-->
+
+## Loop over the files with bash
+
+- Each shard produces one small output on S3
+- The built dataset grows shard after shard; the pod stays small
+- Commit `build_dataset.py`, `merge.py`, `run.sh`; update the README
+
+A solution with bash 
+
+```bash
+#!/bin/bash
+set -e
+for i in $(seq -w 0 16); do
+    python src/build_dataset.py --subset 20250702.en --keyword data --delete-raw \
+        --shards train_000$i.parquet
+done
+python src/merge.py   # concatenate the per-shard outputs on S3 into one built dataset
+```
+
+
+## ⚠️ Delete your service
+
+Everything on the pod is gone.
+
+- Launch a **new** service
+- Get back to a working state from **GitHub + S3 alone**
+
+What did you lose (raw shards? the built dataset? the notebook?)  Why? Fix it: commit it, or put it on S3.
+
+# Step 5 — Other tools for the same job
+
+## The toolbox
+
+The same treatment, without pandas. Each of these tools **streams** by design.
+
+| Tool | What it is | When |
+|---|---|---|
+| **HF CLI** (`hf`) | download from the terminal | scripts in bash |
+| **`mc`** | S3 client in the terminal | move files without Python |
+| **DuckDB** | SQL engine on files (CLI + Python) | look at a parquet, aggregate, filter |
+| **polars** | a lazy DataFrame library | a pandas replacement that scales |
+| **xan** | CSV toolkit in Rust | huge CSVs from the shell |
+
+## Download and upload from the terminal
+
+```bash
+pip install -U huggingface_hub
+hf download omarkamali/wikipedia-monthly 20250702.en/train_00013.parquet \
+   --repo-type dataset --local-dir ./data/raw
+
+mc cp data/processed/wiki_data.parquet s3/group-x/wiki/processed/
+mc ls s3/group-x/wiki/processed/
+```
+
+Compare with `build_dataset.py`: what does the Python script add? (the downsizing, arguments, idempotence, logging)
+
+## Look at a parquet without Python: DuckDB
+
+```bash
+curl https://install.duckdb.org | sh
+F=data/raw/20250702.en/train_00016.parquet
+duckdb -c "DESCRIBE SELECT * FROM '$F';"
+duckdb -c "SELECT id, title, url, substr(text,1,200) AS extract FROM '$F' LIMIT 5;"
+duckdb -c "SELECT count(*), avg(length(text)), max(length(text)) FROM '$F';"
+```
+
+## The extraction, three other ways
+
+::: {.panel-tabset}
+
+### DuckDB (SQL)
+```python
+import duckdb
+out = duckdb.sql("""
+  SELECT id, title, url, length(text) AS length
+  FROM read_parquet('data/raw/20250702.en/train_00000.parquet')
+  WHERE text LIKE '%data%'
+""").df()
+```
+Also on all the raw shards at once with a glob `'data/raw/20250702.en/*.parquet'`, and directly on S3 with the `httpfs` extension.
+
+### polars (lazy)
+```python
+import polars as pl
+out = (pl.scan_parquet("data/raw/20250702.en/train_00000.parquet")
+         .filter(pl.col("text").str.contains("data"))
+         .select(["id", "title", "url", pl.col("text").str.len_chars().alias("length")])
+         .collect(streaming=True))
+```
+
+### xan (CSV)
+```bash
+duckdb -c "COPY (SELECT id, title, url, text FROM '$F') TO 'wiki16.csv';"
+xan count wiki16.csv
+xan search -s text data wiki16.csv | xan select id,title,url | xan count
+xan map 'len(text) as length' wiki16.csv | xan hist -s length
+```
+
+:::
+
+Run one of them on the 2.3 GB shard, on the 4 GB service. Does it hold?
+
+
+# Wrap-up
+
+## Peer re-execution
+
+Swap repositories with another group.
+
+On a **fresh** service, run the other group's pipeline **from their README only**, without asking them anything.
+
+Open an **issue** on their repository:
+
+- what broke, what was unclear
+- how long it took
+- one suggestion
+
+## Debrief
+
+::: {.callout-tip title="Three things to remember"}
+1. The pod is compute, not storage
+2. Do not load what you do not need
+3. If it is not in Git or on S3, it does not exist (at least, in the long time)
+:::
+
+**Kill your services.**
+
+
+## Resources
+
+- [The Turing Way — Guide for Reproducible Research](https://book.the-turing-way.org/)
+- [Onyxia user guide](https://docs.onyxia.sh/user-doc/user-guide)
+- [Stoudt et al. (2024). Ten simple rules for building and maintaining a responsible data science workflow. PLOS Comp Bio](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012232)
+- [UCSD — Data management best practices](https://library.ucsd.edu/research-and-collections/research-data/plan-and-manage/data-management-best-practices.html)
+- [Wickham (2014). Tidy data. JSS](https://vita.had.co.nz/papers/tidy-data.pdf)
+- [IDRIS cheat sheet (Jean Zay)](http://www.idris.fr/media/su/idrischeatsheet.pdf)
+- [Software Carpentry — The Unix Shell](https://swcarpentry.github.io/shell-novice/)
+- [Perez-Riverol et al. (2016). Ten Simple Rules for Taking Advantage of Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004947)
