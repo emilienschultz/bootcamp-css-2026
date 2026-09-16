@@ -7,7 +7,6 @@ format:
     revealjs:
         slide-number: true
         theme: simple
-        transition: slide
         highlight-style: github
         code-line-numbers: false
         smaller: false
@@ -28,22 +27,22 @@ format:
 Everything we do today has to survive **the loss of your computer**. Scientific computation needs robustness, not brittleness.
 :::
 
-## Tree questions
+## 3 questions
 
-- Who are you?
+- What is your background ?
 - What is the **largest dataset** you ever opened?
 - Did you ever meet limit to run scripts/computation?
 
 ## Programme
 
-1. The new era of scientific computing
+1. Some elements of scientific computing
 2. Reproducibility, open science & DevOps
 3. Organising a data project
 4. Storage vs compute: sizes, HPC
-5. Onyxia (live)
+5. Onyxia & remote services
 6. Secrets & security hygiene
-7. SSH (live)
-8. Hands on (mainly afternoon)
+7. SSH & remote servers
+8. Hands on
 
 
 ## The philosophy of the day
@@ -71,9 +70,9 @@ It changes a lot of practices, but not the general philosophy or architecture we
 :::
 
 
-# The new era of scientific computing
+# Some elements of scientific computing
 
-## New skills in computational social science?
+## Computational social science?
 
 - **New volumes** of data in fields that were not computational: text, web, admin data, digital traces
 - **Higher expectations** of reproducibility and long-term storage (journals, funders, DMPs)
@@ -219,7 +218,7 @@ A new terminology that is invading computational practice
 
 You will work with research engineers, data engineers, sysadmins of the datalab / HPC.
 
-Knowing their words (*pod, bucket, job, image, quota*) is what makes a ticket answered in one exchange instead of five.
+Knowing their words (*pod, bucket, job, image, quota*) may allow new collaborations !
 
 ## The reproducibility ladder
 
@@ -300,12 +299,11 @@ Paths are configuration, not code.
 
 ## Rule 3: organise the code for collaboration
 
-- One script = one step (if you want to go further, a `run.sh` / `Makefile` chains them-
-- Parameters as CLI arguments or a config file, never hard-coded (so you can share your code)
-- Log what you do (`print` is a start, `logging` is better)
+- Comments in the script ; different files to modularize
 - Git: one branch per person/feature, small commits, PR + review
+- Log what you do (`print` is a start, `logging` is better)
 - Issues as the shared to-do list
-- Conventions > tools: write them in the README
+- Conventions > update the README
 
 ## The data lifecycle : a specific philosophy
 
@@ -369,6 +367,8 @@ Format is both information & affordance
 
 ## Data architecture: aim for tidy data
 
+*Take time to transform the data if needed*
+
 - Separate raw data from transformed data
 - Move from unstructured to structured
 - Tidy data
@@ -393,7 +393,7 @@ Format is both information & affordance
 |---|---|---|
 | 1 MB | a survey | anything works |
 | 100 MB | a year of admin data | Excel breaks, pandas is fine |
-| 1 GB | one Wikipedia shard, compressed | think about RAM |
+| 1 GB | Several years of newspapers | think about RAM |
 | 10–100 GB | full Wikipedia, a month of Reddit | stream or sample, remote machine |
 | 1 TB+ | | you need a data engineer |
 
@@ -583,8 +583,10 @@ If you leak something: **revoke first**, then clean the history. Prevention is m
 - The universal door to servers and HPC
 - (Also one way Git can talk to GitHub; today we use HTTPS + token)
 
+Dedicated Virtual Machine
+
 ```bash
-ssh eschultz@cca.in2p3.fr
+ssh ubuntu@157.136.250.57
 ```
 
 ## Command line: a reminder
@@ -617,6 +619,8 @@ python src/build.py
 
 ## Create a key
 
+(on Unix / use Onyxia or look how to do in on Windows ;)
+
 ```bash
 ssh-keygen -t ed25519 -C "name@ensae.fr"
 ls ~/.ssh/
@@ -631,11 +635,12 @@ Then `ssh user@SERVER` asks for nothing.
 
 ## Use it
 
-TO DO : CREATE A VM + PUT THE IP
+Put you public key in the scratchpad and I give you access
+
 
 ```bash
-ssh user@SERVER                      # connect
-scp file.py user@SERVER:~/project/    # copy a file
+ssh ubuntu@157.136.250.57             # connect
+scp test.txt user@SERVER:~/project/    # copy a file
 ```
 
 `~/.ssh/config` to give names to servers:
@@ -651,11 +656,11 @@ then `ssh crest`.
 
 ## Once on the server
 
-- `htop`, `nproc`, `free -h`, `df -h`, `du -sh *`: know the machine
-- Keep a job alive after disconnecting: `nohup python script.py &` or **`tmux`**
-- Reach a remote Jupyter: `ssh -L 8888:localhost:8888 crest`
-- Run your pipeline there: `git clone https://github.com/ORG/repo.git && ./run.sh`
+Do your live
 
+- Run tools (R, Jupyter, etc.)
+- Manipulate files
+- etc.
 
 # Code versioning: recap
 
@@ -724,23 +729,21 @@ Git talks to GitHub over **HTTPS**. Your password does not work: you need a **pe
 1. GitHub → *Settings → Developer settings → Personal access tokens → Fine-grained*
 2. Scope: your group repository, **Contents: read & write**, expiry: one week
 3. Copy it once; it is a secret ([doc](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens))
-4. Use it as the password when Git asks, and let Git remember it:
 
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "you@ensae.fr"
 git config --global credential.helper store   # remembers the token on this service
-git clone https://github.com/ORG/group-X.git  # username + token as password
+git clone https://github.com/ORG/group-X.git  # HTTPS
 ```
 
-::: {.callout-warning}
-The token is stored in clear in `~/.git-credentials` on the pod. It dies with the pod. Never paste it in a file of the repository.
-:::
+Or
 
-
+```bash
+git clone https://x-access-token:VOTRE_TOKEN@github.com/activetigger/activetigger.git
+```
 
 # Hands on
-
 
 ## The challenge
 
@@ -831,7 +834,10 @@ Read the [dataset card](https://huggingface.co/datasets/omarkamali/wikipedia-mon
 - Find a way to download **the smallest shard**: `20250702.en/train_00016.parquet` (576 MB) - Python or CLI
 - Where did the file land? How big is it? (`ls -lh data/raw/...`)
 
-<!--
+## Get a file
+
+In Python
+
 ```python
 from huggingface_hub import hf_hub_download
 
@@ -843,7 +849,15 @@ path = hf_hub_download(
 )
 print(path)
 ```
--->
+
+In CLI
+
+```bash
+hf download omarkamali/wikipedia-monthly \
+  20250702.en/train_00016.parquet \
+  --repo-type dataset \
+  --local-dir data/raw
+```
 
 ## First analytics
 
@@ -966,8 +980,7 @@ print(fs.ls(f"{BUCKET}/wiki/processed"))
 Now the other end of the list: `train_00000.parquet` (2.3 GB), `train_00001.parquet` (1.9 GB)...
 
 ```bash
-python src/build_dataset.py --subset 20250702.en --keyword data --delete-raw \
-   --shards train_00000.parquet
+python src/build_dataset.py
 ```
 
 On your **4 GB** service. Look at your disk while it downloads: `df -h .`
@@ -1010,23 +1023,12 @@ if args.delete_raw:
 ```
 -->
 
-## Loop over the files with bash
+## Loop over the files
 
 - Each shard produces one small output on S3
 - The built dataset grows shard after shard; the pod stays small
 - Commit `build_dataset.py`, `merge.py`, `run.sh`; update the README
 
-A solution with bash 
-
-```bash
-#!/bin/bash
-set -e
-for i in $(seq -w 0 16); do
-    python src/build_dataset.py --subset 20250702.en --keyword data --delete-raw \
-        --shards train_000$i.parquet
-done
-python src/merge.py   # concatenate the per-shard outputs on S3 into one built dataset
-```
 
 
 ## ⚠️ Delete your service
@@ -1040,30 +1042,6 @@ What did you lose (raw shards? the built dataset? the notebook?)  Why? Fix it: c
 
 # Step 5 — Other tools for the same job
 
-## The toolbox
-
-The same treatment, without pandas. Each of these tools **streams** by design.
-
-| Tool | What it is | When |
-|---|---|---|
-| **HF CLI** (`hf`) | download from the terminal | scripts in bash |
-| **`mc`** | S3 client in the terminal | move files without Python |
-| **DuckDB** | SQL engine on files (CLI + Python) | look at a parquet, aggregate, filter |
-| **polars** | a lazy DataFrame library | a pandas replacement that scales |
-| **xan** | CSV toolkit in Rust | huge CSVs from the shell |
-
-## Download and upload from the terminal
-
-```bash
-pip install -U huggingface_hub
-hf download omarkamali/wikipedia-monthly 20250702.en/train_00013.parquet \
-   --repo-type dataset --local-dir ./data/raw
-
-mc cp data/processed/wiki_data.parquet s3/group-x/wiki/processed/
-mc ls s3/group-x/wiki/processed/
-```
-
-Compare with `build_dataset.py`: what does the Python script add? (the downsizing, arguments, idempotence, logging)
 
 ## Look at a parquet without Python: DuckDB
 
@@ -1077,7 +1055,6 @@ duckdb -c "SELECT count(*), avg(length(text)), max(length(text)) FROM '$F';"
 
 ## The extraction, three other ways
 
-::: {.panel-tabset}
 
 ### DuckDB (SQL)
 ```python
@@ -1100,16 +1077,8 @@ out = (pl.scan_parquet("data/raw/20250702.en/train_00000.parquet")
 ```
 
 ### xan (CSV)
-```bash
-duckdb -c "COPY (SELECT id, title, url, text FROM '$F') TO 'wiki16.csv';"
-xan count wiki16.csv
-xan search -s text data wiki16.csv | xan select id,title,url | xan count
-xan map 'len(text) as length' wiki16.csv | xan hist -s length
-```
 
-:::
-
-Run one of them on the 2.3 GB shard, on the 4 GB service. Does it hold?
+[Specific tools for specific needs](https://github.com/medialab/xan)
 
 
 # Wrap-up

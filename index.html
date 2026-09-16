@@ -241,10 +241,10 @@
 </div>
 </div>
 </section>
-<section id="tree-questions" class="slide level2">
-<h2>Tree questions</h2>
+<section id="questions" class="slide level2">
+<h2>3 questions</h2>
 <ul>
-<li>Who are you?</li>
+<li>What is your background ?</li>
 <li>What is the <strong>largest dataset</strong> you ever opened?</li>
 <li>Did you ever meet limit to run scripts/computation?</li>
 </ul>
@@ -252,14 +252,14 @@
 <section id="programme" class="slide level2">
 <h2>Programme</h2>
 <ol type="1">
-<li>The new era of scientific computing</li>
+<li>Some elements of scientific computing</li>
 <li>Reproducibility, open science &amp; DevOps</li>
 <li>Organising a data project</li>
 <li>Storage vs compute: sizes, HPC</li>
-<li>Onyxia (live)</li>
+<li>Onyxia &amp; remote services</li>
 <li>Secrets &amp; security hygiene</li>
-<li>SSH (live)</li>
-<li>Hands on (mainly afternoon)</li>
+<li>SSH &amp; remote servers</li>
+<li>Hands on</li>
 </ol>
 </section>
 <section id="the-philosophy-of-the-day" class="slide level2">
@@ -298,12 +298,12 @@
 </div>
 </section></section>
 <section>
-<section id="the-new-era-of-scientific-computing" class="title-slide slide level1 center">
-<h1>The new era of scientific computing</h1>
+<section id="some-elements-of-scientific-computing" class="title-slide slide level1 center">
+<h1>Some elements of scientific computing</h1>
 
 </section>
-<section id="new-skills-in-computational-social-science" class="slide level2">
-<h2>New skills in computational social science?</h2>
+<section id="computational-social-science" class="slide level2">
+<h2>Computational social science?</h2>
 <ul>
 <li><strong>New volumes</strong> of data in fields that were not computational: text, web, admin data, digital traces</li>
 <li><strong>Higher expectations</strong> of reproducibility and long-term storage (journals, funders, DMPs)</li>
@@ -477,7 +477,7 @@
 <section id="new-vocabulary-new-collaborations" class="slide level2">
 <h2>New vocabulary, new collaborations</h2>
 <p>You will work with research engineers, data engineers, sysadmins of the datalab / HPC.</p>
-<p>Knowing their words (<em>pod, bucket, job, image, quota</em>) is what makes a ticket answered in one exchange instead of five.</p>
+<p>Knowing their words (<em>pod, bucket, job, image, quota</em>) may allow new collaborations !</p>
 </section>
 <section id="the-reproducibility-ladder" class="slide level2">
 <h2>The reproducibility ladder</h2>
@@ -617,12 +617,11 @@
 <section id="rule-3-organise-the-code-for-collaboration" class="slide level2">
 <h2>Rule 3: organise the code for collaboration</h2>
 <ul>
-<li>One script = one step (if you want to go further, a <code>run.sh</code> / <code>Makefile</code> chains them-</li>
-<li>Parameters as CLI arguments or a config file, never hard-coded (so you can share your code)</li>
-<li>Log what you do (<code>print</code> is a start, <code>logging</code> is better)</li>
+<li>Comments in the script ; different files to modularize</li>
 <li>Git: one branch per person/feature, small commits, PR + review</li>
+<li>Log what you do (<code>print</code> is a start, <code>logging</code> is better)</li>
 <li>Issues as the shared to-do list</li>
-<li>Conventions &gt; tools: write them in the README</li>
+<li>Conventions &gt; update the README</li>
 </ul>
 </section>
 <section id="the-data-lifecycle-a-specific-philosophy" class="slide level2">
@@ -717,6 +716,7 @@
 </section>
 <section id="data-architecture-aim-for-tidy-data" class="slide level2">
 <h2>Data architecture: aim for tidy data</h2>
+<p><em>Take time to transform the data if needed</em></p>
 <ul>
 <li>Separate raw data from transformed data</li>
 <li>Move from unstructured to structured</li>
@@ -794,7 +794,7 @@
 </tr>
 <tr class="odd">
 <td>1 GB</td>
-<td>one Wikipedia shard, compressed</td>
+<td>Several years of newspapers</td>
 <td>think about RAM</td>
 </tr>
 <tr class="even">
@@ -1093,7 +1093,8 @@
 <li>The universal door to servers and HPC</li>
 <li>(Also one way Git can talk to GitHub; today we use HTTPS + token)</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> eschultz@cca.in2p3.fr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Dedicated Virtual Machine</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> ubuntu@157.136.250.57</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="command-line-a-reminder" class="slide level2">
 <h2>Command line: a reminder</h2>
@@ -1131,6 +1132,7 @@
 </section>
 <section id="create-a-key" class="slide level2">
 <h2>Create a key</h2>
+<p>(on Unix / use Onyxia or look how to do in on Windows ;)</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"name@ensae.fr"</span></span>
 <span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ~/.ssh/</span>
 <span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># id_ed25519      -&gt; private, never leaves your machine</span></span>
@@ -1141,9 +1143,9 @@
 </section>
 <section id="use-it" class="slide level2">
 <h2>Use it</h2>
-<p>TO DO : CREATE A VM + PUT THE IP</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> user@SERVER                      <span class="co"># connect</span></span>
-<span id="cb12-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> file.py user@SERVER:~/project/    <span class="co"># copy a file</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Put you public key in the scratchpad and I give you access</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> ubuntu@157.136.250.57             <span class="co"># connect</span></span>
+<span id="cb12-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> test.txt user@SERVER:~/project/    <span class="co"># copy a file</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>~/.ssh/config</code> to give names to servers:</p>
 <pre><code>Host crest
     HostName SERVER
@@ -1153,11 +1155,11 @@
 </section>
 <section id="once-on-the-server" class="slide level2">
 <h2>Once on the server</h2>
+<p>Do your live</p>
 <ul>
-<li><code>htop</code>, <code>nproc</code>, <code>free -h</code>, <code>df -h</code>, <code>du -sh *</code>: know the machine</li>
-<li>Keep a job alive after disconnecting: <code>nohup python script.py &amp;</code> or <strong><code>tmux</code></strong></li>
-<li>Reach a remote Jupyter: <code>ssh -L 8888:localhost:8888 crest</code></li>
-<li>Run your pipeline there: <code>git clone https://github.com/ORG/repo.git &amp;&amp; ./run.sh</code></li>
+<li>Run tools (R, Jupyter, etc.)</li>
+<li>Manipulate files</li>
+<li>etc.</li>
 </ul>
 </section></section>
 <section>
@@ -1243,25 +1245,13 @@ n_bins = 100
 <li>GitHub → <em>Settings → Developer settings → Personal access tokens → Fine-grained</em></li>
 <li>Scope: your group repository, <strong>Contents: read &amp; write</strong>, expiry: one week</li>
 <li>Copy it once; it is a secret (<a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">doc</a>)</li>
-<li>Use it as the password when Git asks, and let Git remember it:</li>
 </ol>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name <span class="st">"Your Name"</span></span>
 <span id="cb16-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"you@ensae.fr"</span></span>
 <span id="cb16-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> credential.helper store   <span class="co"># remembers the token on this service</span></span>
-<span id="cb16-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/ORG/group-X.git  <span class="co"># username + token as password</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-warning callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Warning</strong></p>
-</div>
-<div class="callout-content">
-<p>The token is stored in clear in <code>~/.git-credentials</code> on the pod. It dies with the pod. Never paste it in a file of the repository.</p>
-</div>
-</div>
-</div>
+<span id="cb16-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/ORG/group-X.git  <span class="co"># HTTPS</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Or</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://x-access-token:VOTRE_TOKEN@github.com/activetigger/activetigger.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section></section>
 <section>
 <section id="hands-on" class="title-slide slide level1 center">
@@ -1411,19 +1401,24 @@ git push -u origin yourname/readme
 <li>Find a way to download <strong>the smallest shard</strong>: <code>20250702.en/train_00016.parquet</code> (576 MB) - Python or CLI</li>
 <li>Where did the file land? How big is it? (<code>ls -lh data/raw/...</code>)</li>
 </ul>
-<!--
-```python
-from huggingface_hub import hf_hub_download
-
-path = hf_hub_download(
-    repo_id="omarkamali/wikipedia-monthly",
-    repo_type="dataset",
-    filename="20250702.en/train_00016.parquet",
-    local_dir="data/raw",
-)
-print(path)
-```
--->
+</section>
+<section id="get-a-file" class="slide level2">
+<h2>Get a file</h2>
+<p>In Python</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> huggingface_hub <span class="im">import</span> hf_hub_download</span>
+<span id="cb18-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> hf_hub_download(</span>
+<span id="cb18-4"><a href="" aria-hidden="true" tabindex="-1"></a>    repo_id<span class="op">=</span><span class="st">"omarkamali/wikipedia-monthly"</span>,</span>
+<span id="cb18-5"><a href="" aria-hidden="true" tabindex="-1"></a>    repo_type<span class="op">=</span><span class="st">"dataset"</span>,</span>
+<span id="cb18-6"><a href="" aria-hidden="true" tabindex="-1"></a>    filename<span class="op">=</span><span class="st">"20250702.en/train_00016.parquet"</span>,</span>
+<span id="cb18-7"><a href="" aria-hidden="true" tabindex="-1"></a>    local_dir<span class="op">=</span><span class="st">"data/raw"</span>,</span>
+<span id="cb18-8"><a href="" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In CLI</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">hf</span> download omarkamali/wikipedia-monthly <span class="dt">\</span></span>
+<span id="cb19-2"><a href="" aria-hidden="true" tabindex="-1"></a>  20250702.en/train_00016.parquet <span class="dt">\</span></span>
+<span id="cb19-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">--repo-type</span> dataset <span class="dt">\</span></span>
+<span id="cb19-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">--local-dir</span> data/raw</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="first-analytics" class="slide level2">
 <h2>First analytics</h2>
@@ -1573,8 +1568,7 @@ print(fs.ls(f"{BUCKET}/wiki/processed"))
 <section id="the-same-script-on-the-big-shards" class="slide level2">
 <h2>The same script, on the big shards</h2>
 <p>Now the other end of the list: <code>train_00000.parquet</code> (2.3 GB), <code>train_00001.parquet</code> (1.9 GB)…</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/build_dataset.py <span class="at">--subset</span> 20250702.en <span class="at">--keyword</span> data <span class="at">--delete-raw</span> <span class="dt">\</span></span>
-<span id="cb17-2"><a href="" aria-hidden="true" tabindex="-1"></a>   <span class="at">--shards</span> train_00000.parquet</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/build_dataset.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>On your <strong>4 GB</strong> service. Look at your disk while it downloads: <code>df -h .</code></p>
 <p>What happens? Where do you see it? <strong>Why?</strong></p>
 </section>
@@ -1615,21 +1609,13 @@ if args.delete_raw:
 ```
 -->
 </section>
-<section id="loop-over-the-files-with-bash" class="slide level2">
-<h2>Loop over the files with bash</h2>
+<section id="loop-over-the-files" class="slide level2">
+<h2>Loop over the files</h2>
 <ul>
 <li>Each shard produces one small output on S3</li>
 <li>The built dataset grows shard after shard; the pod stays small</li>
 <li>Commit <code>build_dataset.py</code>, <code>merge.py</code>, <code>run.sh</code>; update the README</li>
 </ul>
-<p>A solution with bash</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb18-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
-<span id="cb18-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> <span class="at">-w</span> 0 16<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb18-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="ex">python</span> src/build_dataset.py <span class="at">--subset</span> 20250702.en <span class="at">--keyword</span> data <span class="at">--delete-raw</span> <span class="dt">\</span></span>
-<span id="cb18-5"><a href="" aria-hidden="true" tabindex="-1"></a>        <span class="at">--shards</span> train_000<span class="va">$i</span>.parquet</span>
-<span id="cb18-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb18-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> src/merge.py   <span class="co"># concatenate the per-shard outputs on S3 into one built dataset</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="delete-your-service" class="slide level2">
 <h2>⚠️ Delete your service</h2>
@@ -1645,99 +1631,32 @@ if args.delete_raw:
 <h1>Step 5 — Other tools for the same job</h1>
 
 </section>
-<section id="the-toolbox" class="slide level2">
-<h2>The toolbox</h2>
-<p>The same treatment, without pandas. Each of these tools <strong>streams</strong> by design.</p>
-<table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Tool</th>
-<th>What it is</th>
-<th>When</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>HF CLI</strong> (<code>hf</code>)</td>
-<td>download from the terminal</td>
-<td>scripts in bash</td>
-</tr>
-<tr class="even">
-<td><strong><code>mc</code></strong></td>
-<td>S3 client in the terminal</td>
-<td>move files without Python</td>
-</tr>
-<tr class="odd">
-<td><strong>DuckDB</strong></td>
-<td>SQL engine on files (CLI + Python)</td>
-<td>look at a parquet, aggregate, filter</td>
-</tr>
-<tr class="even">
-<td><strong>polars</strong></td>
-<td>a lazy DataFrame library</td>
-<td>a pandas replacement that scales</td>
-</tr>
-<tr class="odd">
-<td><strong>xan</strong></td>
-<td>CSV toolkit in Rust</td>
-<td>huge CSVs from the shell</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="download-and-upload-from-the-terminal" class="slide level2">
-<h2>Download and upload from the terminal</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-U</span> huggingface_hub</span>
-<span id="cb19-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">hf</span> download omarkamali/wikipedia-monthly 20250702.en/train_00013.parquet <span class="dt">\</span></span>
-<span id="cb19-3"><a href="" aria-hidden="true" tabindex="-1"></a>   <span class="at">--repo-type</span> dataset <span class="at">--local-dir</span> ./data/raw</span>
-<span id="cb19-4"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mc</span> cp data/processed/wiki_data.parquet s3/group-x/wiki/processed/</span>
-<span id="cb19-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mc</span> ls s3/group-x/wiki/processed/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Compare with <code>build_dataset.py</code>: what does the Python script add? (the downsizing, arguments, idempotence, logging)</p>
-</section>
 <section id="look-at-a-parquet-without-python-duckdb" class="slide level2">
 <h2>Look at a parquet without Python: DuckDB</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> https://install.duckdb.org <span class="kw">|</span> <span class="fu">sh</span></span>
-<span id="cb20-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="va">F</span><span class="op">=</span>data/raw/20250702.en/train_00016.parquet</span>
-<span id="cb20-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"DESCRIBE SELECT * FROM '</span><span class="va">$F</span><span class="st">';"</span></span>
-<span id="cb20-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"SELECT id, title, url, substr(text,1,200) AS extract FROM '</span><span class="va">$F</span><span class="st">' LIMIT 5;"</span></span>
-<span id="cb20-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"SELECT count(*), avg(length(text)), max(length(text)) FROM '</span><span class="va">$F</span><span class="st">';"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> https://install.duckdb.org <span class="kw">|</span> <span class="fu">sh</span></span>
+<span id="cb21-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="va">F</span><span class="op">=</span>data/raw/20250702.en/train_00016.parquet</span>
+<span id="cb21-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"DESCRIBE SELECT * FROM '</span><span class="va">$F</span><span class="st">';"</span></span>
+<span id="cb21-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"SELECT id, title, url, substr(text,1,200) AS extract FROM '</span><span class="va">$F</span><span class="st">' LIMIT 5;"</span></span>
+<span id="cb21-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"SELECT count(*), avg(length(text)), max(length(text)) FROM '</span><span class="va">$F</span><span class="st">';"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="the-extraction-three-other-ways" class="slide level2">
 <h2>The extraction, three other ways</h2>
-<div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">DuckDB (SQL)</a></li><li><a href="#tabset-1-2">polars (lazy)</a></li><li><a href="#tabset-1-3">xan (CSV)</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
-<span id="cb21-2"><a href="" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> duckdb.sql(<span class="st">"""</span></span>
-<span id="cb21-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT id, title, url, length(text) AS length</span></span>
-<span id="cb21-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM read_parquet('data/raw/20250702.en/train_00000.parquet')</span></span>
-<span id="cb21-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE text LIKE '</span><span class="sc">%d</span><span class="st">ata%'</span></span>
-<span id="cb21-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).df()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<h3 id="duckdb-sql">DuckDB (SQL)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb22-2"><a href="" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> duckdb.sql(<span class="st">"""</span></span>
+<span id="cb22-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT id, title, url, length(text) AS length</span></span>
+<span id="cb22-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM read_parquet('data/raw/20250702.en/train_00000.parquet')</span></span>
+<span id="cb22-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE text LIKE '</span><span class="sc">%d</span><span class="st">ata%'</span></span>
+<span id="cb22-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).df()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Also on all the raw shards at once with a glob <code>'data/raw/20250702.en/*.parquet'</code>, and directly on S3 with the <code>httpfs</code> extension.</p>
-</div>
-<div id="tabset-1-2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
-<span id="cb22-2"><a href="" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> (pl.scan_parquet(<span class="st">"data/raw/20250702.en/train_00000.parquet"</span>)</span>
-<span id="cb22-3"><a href="" aria-hidden="true" tabindex="-1"></a>         .<span class="bu">filter</span>(pl.col(<span class="st">"text"</span>).<span class="bu">str</span>.contains(<span class="st">"data"</span>))</span>
-<span id="cb22-4"><a href="" aria-hidden="true" tabindex="-1"></a>         .select([<span class="st">"id"</span>, <span class="st">"title"</span>, <span class="st">"url"</span>, pl.col(<span class="st">"text"</span>).<span class="bu">str</span>.len_chars().alias(<span class="st">"length"</span>)])</span>
-<span id="cb22-5"><a href="" aria-hidden="true" tabindex="-1"></a>         .collect(streaming<span class="op">=</span><span class="va">True</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="tabset-1-3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-c</span> <span class="st">"COPY (SELECT id, title, url, text FROM '</span><span class="va">$F</span><span class="st">') TO 'wiki16.csv';"</span></span>
-<span id="cb23-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">xan</span> count wiki16.csv</span>
-<span id="cb23-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">xan</span> search <span class="at">-s</span> text data wiki16.csv <span class="kw">|</span> <span class="ex">xan</span> select id,title,url <span class="kw">|</span> <span class="ex">xan</span> count</span>
-<span id="cb23-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">xan</span> map <span class="st">'len(text) as length'</span> wiki16.csv <span class="kw">|</span> <span class="ex">xan</span> hist <span class="at">-s</span> length</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-<p>Run one of them on the 2.3 GB shard, on the 4 GB service. Does it hold?</p>
+<h3 id="polars-lazy">polars (lazy)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb23-2"><a href="" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> (pl.scan_parquet(<span class="st">"data/raw/20250702.en/train_00000.parquet"</span>)</span>
+<span id="cb23-3"><a href="" aria-hidden="true" tabindex="-1"></a>         .<span class="bu">filter</span>(pl.col(<span class="st">"text"</span>).<span class="bu">str</span>.contains(<span class="st">"data"</span>))</span>
+<span id="cb23-4"><a href="" aria-hidden="true" tabindex="-1"></a>         .select([<span class="st">"id"</span>, <span class="st">"title"</span>, <span class="st">"url"</span>, pl.col(<span class="st">"text"</span>).<span class="bu">str</span>.len_chars().alias(<span class="st">"length"</span>)])</span>
+<span id="cb23-5"><a href="" aria-hidden="true" tabindex="-1"></a>         .collect(streaming<span class="op">=</span><span class="va">True</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<h3 id="xan-csv">xan (CSV)</h3>
+<p><a href="https://github.com/medialab/xan">Specific tools for specific needs</a></p>
 </section></section>
 <section>
 <section id="wrap-up" class="title-slide slide level1 center">
@@ -1953,7 +1872,7 @@ if args.delete_raw:
         previewLinks: false,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
-        transition: 'slide',
+        transition: 'none',
 
         // Transition speed (default/fast/slow)
         transitionSpeed: 'default',
